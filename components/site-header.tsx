@@ -1,0 +1,110 @@
+"use client";
+import * as React from "react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+
+export function SiteHeader() {
+  const [scrolled, setScrolled] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
+  const [menuOpen, setMenuOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 80);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  React.useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open]);
+
+  const state = scrolled ? "scrolled" : "hero-dark";
+
+  return (
+    <>
+      <header id="site-header" data-state={state}>
+        <nav className="container nav" aria-label="Main navigation">
+          <Link href="#" className="nav-brand">
+            <span className="brand-mark" aria-hidden="true">L</span>
+            <span className="brand-name">Lorem Ipsum, <span className="brand-md">MD</span></span>
+          </Link>
+
+          <ul className="nav-links" id="nav-links">
+            <li><a href="#about">About</a></li>
+            <li className="has-menu">
+              <button
+                className="nav-menu-trigger"
+                aria-haspopup="true"
+                aria-expanded={menuOpen}
+                aria-controls="services-menu"
+                onClick={() => setMenuOpen((v) => !v)}
+              >
+                Services
+                <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
+                  <path d="M2 3.5 L5 6.5 L8 3.5" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+              <div className="nav-menu" id="services-menu" role="menu">
+                <a href="#services" role="menuitem">Lorem Ipsum</a>
+                <a href="#services" role="menuitem">Dolor Sit Amet</a>
+                <a href="#services" role="menuitem">Consectetur Elit</a>
+                <a href="#services" role="menuitem">Adipiscing Sed</a>
+              </div>
+            </li>
+            <li><a href="#conditions">Conditions</a></li>
+            <li><a href="#process">For Families</a></li>
+            <li><a href="#faq">FAQs</a></li>
+          </ul>
+
+          <div className="nav-cta">
+            <a href="#" className="nav-portal">Patient Portal</a>
+            <Button asChild size="sm"><a href="#book">Book a Consultation <span aria-hidden="true">→</span></a></Button>
+          </div>
+
+          <button
+            className="nav-hamburger"
+            id="hamburger"
+            aria-expanded={open}
+            aria-controls="nav-drawer"
+            aria-label="Open navigation menu"
+            onClick={() => setOpen((v) => !v)}
+          >
+            <span /><span /><span />
+          </button>
+        </nav>
+      </header>
+
+      {open && (
+        <div
+          className="drawer-overlay is-open"
+          id="drawer-overlay"
+          onClick={() => setOpen(false)}
+        />
+      )}
+      <aside
+        className={`nav-drawer ${open ? "is-open" : ""}`}
+        id="nav-drawer"
+        hidden={!open}
+        aria-label="Mobile navigation"
+      >
+        <div className="drawer-head">
+          <span className="drawer-brand">Lorem Ipsum, MD</span>
+          <button className="drawer-close" onClick={() => setOpen(false)} aria-label="Close menu">×</button>
+        </div>
+        <nav>
+          <a href="#about" onClick={() => setOpen(false)}>About</a>
+          <a href="#services" onClick={() => setOpen(false)}>Services</a>
+          <a href="#conditions" onClick={() => setOpen(false)}>Conditions</a>
+          <a href="#process" onClick={() => setOpen(false)}>For Families</a>
+          <a href="#faq" onClick={() => setOpen(false)}>FAQs</a>
+          <a href="#" className="drawer-portal" onClick={() => setOpen(false)}>Patient Portal</a>
+        </nav>
+        <Button asChild className="drawer-cta"><a href="#book" onClick={() => setOpen(false)}>Book a Consultation</a></Button>
+      </aside>
+    </>
+  );
+}
