@@ -284,6 +284,8 @@ address{font-style:normal;font-size:0.9rem;line-height:1.8;color:var(--sage-100)
 }
 @media (max-width:768px){
   .section{padding-block:var(--sp-12)}
+  .trust-bar-inner{flex-direction:column;align-items:center;text-align:center}
+  .trust-divider{display:none}
   .nav-links,.nav-cta{display:none}
   .nav-hamburger{display:flex}
   .nav{justify-content:space-between}
