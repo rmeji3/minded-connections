@@ -21,13 +21,13 @@ export function BookForm() {
     <section id="book" className="section section--book" aria-labelledby="book-heading">
       <div className="container grid-wide-text book-grid">
         <Reveal>
-          <p className="eyebrow">Lorem Ipsum</p>
-          <h2 id="book-heading">Dolor sit amet <em>consectetur.</em></h2>
+          <p className="eyebrow">Request a Consultation</p>
+          <h2 id="book-heading">Let's find the right <em>path forward.</em></h2>
           <p className="lead">
-            Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim.
+            Fill out the form and we'll be in touch within one business day. There's no obligation — just a conversation.
           </p>
           <div className="privacy-well">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit — see our <a href="#">Privacy Policy</a>. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            <p>All information is kept strictly confidential in accordance with HIPAA. See our <a href="#">Privacy Policy</a> for details. We will never share your information without your written consent.</p>
           </div>
         </Reveal>
 
@@ -35,55 +35,56 @@ export function BookForm() {
           <form className="book-form" id="book-form" noValidate onSubmit={onSubmit}>
             <div className="form-row form-row--two">
               <div className="form-field">
-                <label htmlFor="f-child">Lorem ipsum <span className="req">(required)</span></label>
+                <label htmlFor="f-child">Child's first name <span className="req">(required)</span></label>
                 <input id="f-child" name="child" type="text" autoComplete="given-name" aria-required="true" required />
               </div>
               <div className="form-field">
-                <label htmlFor="f-age">Dolor sit <span className="req">(required)</span></label>
-                <input id="f-age" name="age" type="number" min={2} max={17} aria-required="true" required />
+                <label htmlFor="f-age">Child's age <span className="req">(required)</span></label>
+                <input id="f-age" name="age" type="number" min={2} max={18} aria-required="true" required />
               </div>
             </div>
 
             <div className="form-field">
-              <label htmlFor="f-parent">Amet consectetur <span className="req">(required)</span></label>
+              <label htmlFor="f-parent">Parent or guardian name <span className="req">(required)</span></label>
               <input id="f-parent" name="parent" type="text" autoComplete="name" aria-required="true" required />
             </div>
 
             <div className="form-row form-row--two">
               <div className="form-field">
-                <label htmlFor="f-email">Adipiscing email <span className="req">(required)</span></label>
+                <label htmlFor="f-email">Your email <span className="req">(required)</span></label>
                 <input id="f-email" name="email" type="email" autoComplete="email" aria-required="true" required />
               </div>
               <div className="form-field">
-                <label htmlFor="f-phone">Sed do phone</label>
+                <label htmlFor="f-phone">Your phone</label>
                 <input id="f-phone" name="phone" type="tel" autoComplete="tel" />
               </div>
             </div>
 
             <div className="form-field">
-              <label htmlFor="f-hear">Eiusmod tempor incididunt?</label>
+              <label htmlFor="f-hear">How did you hear about us?</label>
               <select id="f-hear" name="hear" defaultValue="">
                 <option value="">Select one…</option>
-                <option>Lorem ipsum</option>
-                <option>Dolor sit amet</option>
-                <option>Consectetur elit</option>
-                <option>Adipiscing sed</option>
+                <option>Psychology Today</option>
+                <option>Doctor referral</option>
+                <option>Friend or family member</option>
+                <option>School or counselor</option>
+                <option>Google search</option>
                 <option>Other</option>
               </select>
             </div>
 
             <div className="form-field">
-              <label htmlFor="f-note">Ut labore et dolore?</label>
-              <textarea id="f-note" name="note" rows={4} placeholder="Lorem ipsum dolor sit amet." />
+              <label htmlFor="f-note">Tell us a little about your child's needs</label>
+              <textarea id="f-note" name="note" rows={4} placeholder="No pressure to have the right words — just share what's on your mind." />
             </div>
 
             <fieldset className="form-field form-radio">
-              <legend>Magna aliqua method</legend>
+              <legend>Preferred contact method</legend>
               <label className="radio"><input type="radio" name="contact" value="email" defaultChecked /> <span>Email</span></label>
               <label className="radio"><input type="radio" name="contact" value="phone" /> <span>Phone</span></label>
             </fieldset>
 
-            <Button type="submit" className="form-submit">Lorem Ipsum</Button>
+            <Button type="submit" className="form-submit">Request a Consultation</Button>
             <p className={`form-status ${status.kind}`} role="status" aria-live="polite">{status.msg}</p>
           </form>
         </Reveal>

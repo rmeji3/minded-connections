@@ -6,20 +6,20 @@ export function Hero() {
     <section id="hero" aria-labelledby="hero-heading">
       <div className="hero-text-panel">
         <div className="hero-inner">
-          <p className="hero-credential">Lorem Ipsum Dolor Sit Amet Consectetur</p>
+          <p className="hero-credential">Board-Certified Child &amp; Adolescent Psychiatrist</p>
           <h1 id="hero-heading">
-            Lorem ipsum dolor sit amet consectetur <em>adipiscing elit.</em>
+            Thoughtful mental health care for children and teens — <em>because growing up is hard.</em>
           </h1>
           <p className="lead hero-lead">
-            Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua — ut enim ad minim veniam, quis nostrud exercitation ullamco.
+            Minded Connections offers evidence-based psychiatric care for ages 4–18, in a warm, unhurried practice built around your family's needs.
           </p>
           <div className="hero-cta-row">
-            <Button asChild><a href="#book">Lorem Ipsum</a></Button>
-            <a href="#about" className="btn-text">Dolor sit amet <span aria-hidden="true">→</span></a>
+            <Button asChild><a href="#book">Book a Free Consultation</a></Button>
+            <a href="#about" className="btn-text">Learn how we can help <span aria-hidden="true">→</span></a>
           </div>
           <div className="hero-trust">
             <span className="hero-trust-dot" aria-hidden="true" />
-            <span>Lorem ipsum dolor · Sit amet consectetur</span>
+            <span>Accepting new patients · In-person &amp; telehealth available</span>
           </div>
         </div>
       </div>

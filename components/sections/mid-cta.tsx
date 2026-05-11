@@ -7,10 +7,10 @@ export function MidCta() {
       <Reveal>
         <div className="container mid-cta-inner">
           <div>
-            <p className="eyebrow">Lorem ipsum?</p>
-            <h3 className="mid-cta-headline">Dolor sit amet consectetur adipiscing elit sed do.</h3>
+            <p className="eyebrow">Ready to get started?</p>
+            <h3 className="mid-cta-headline">Your child doesn't have to navigate this alone.</h3>
           </div>
-          <Button asChild><a href="#book">Lorem Ipsum</a></Button>
+          <Button asChild><a href="#book">Book a Consultation</a></Button>
         </div>
       </Reveal>
     </section>

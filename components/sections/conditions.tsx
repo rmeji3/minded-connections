@@ -1,7 +1,7 @@
 import { Reveal } from "@/components/reveal";
 
 const tags = [
-  "Lorem","Ipsum Dolor","Sit Amet","Consectetur","Adipiscing Elit","Sed Do","Eiusmod Tempor","Incididunt","Ut Labore","Et Dolore","Magna Aliqua","Ut Enim","Ad Minim Veniam","Quis Nostrud",
+  "Anxiety","ADHD","Depression","Autism Spectrum","OCD","PTSD","Behavioral Challenges","Mood Disorders","Sleep Difficulties","Eating Concerns","School Refusal","Social Anxiety","Panic Disorder","Oppositional Defiance","Selective Mutism","Trauma","Grief & Loss","Self-Harm",
 ];
 
 export function Conditions() {
@@ -9,10 +9,10 @@ export function Conditions() {
     <section id="conditions" className="section section--cream">
       <div className="container container--narrow conditions-head">
         <Reveal>
-          <p className="eyebrow">Lorem Ipsum</p>
-          <h2>Dolor sit amet <em>consectetur.</em></h2>
+          <p className="eyebrow">Areas of Care</p>
+          <h2>We treat a wide range of <em>childhood conditions.</em></h2>
           <p className="lead">
-            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.
+            Every child's presentation is unique. These are some of the most common areas we support — if you don't see your child's concern listed, reach out anyway.
           </p>
         </Reveal>
       </div>
@@ -20,7 +20,7 @@ export function Conditions() {
         <Reveal>
           <ul className="conditions-list" role="list">
             {tags.map((t) => (
-              <li key={t}><a href="#" className="condition-tag">{t}</a></li>
+              <li key={t}><a href="#book" className="condition-tag">{t}</a></li>
             ))}
           </ul>
         </Reveal>

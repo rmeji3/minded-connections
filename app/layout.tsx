@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Lorem Ipsum — Practice Template",
-  description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+  title: "Minded Connections — Child & Adolescent Psychiatry",
+  description: "Evidence-based psychiatric care for children and teens ages 4-18. Dr. Michelle Hernandez, MD offers evaluations, therapy, and medication management in Corona, CA.",
 };
 
 export default function RootLayout({

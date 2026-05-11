@@ -29,8 +29,8 @@ export function SiteHeader() {
       <header id="site-header" data-state={state}>
         <nav className="container nav" aria-label="Main navigation">
           <Link href="#" className="nav-brand">
-            <span className="brand-mark" aria-hidden="true">L</span>
-            <span className="brand-name">Lorem Ipsum, <span className="brand-md">MD</span></span>
+            <span className="brand-mark" aria-hidden="true">M</span>
+            <span className="brand-name">Minded Connections, <span className="brand-md">MD</span></span>
           </Link>
 
           <ul className="nav-links" id="nav-links">
@@ -49,10 +49,11 @@ export function SiteHeader() {
                 </svg>
               </button>
               <div className="nav-menu" id="services-menu" role="menu">
-                <a href="#services" role="menuitem">Lorem Ipsum</a>
-                <a href="#services" role="menuitem">Dolor Sit Amet</a>
-                <a href="#services" role="menuitem">Consectetur Elit</a>
-                <a href="#services" role="menuitem">Adipiscing Sed</a>
+                <a href="#services" role="menuitem">Psychiatric Evaluation</a>
+                <a href="#services" role="menuitem">Medication Management</a>
+                <a href="#services" role="menuitem">Individual Therapy</a>
+                <a href="#services" role="menuitem">Family Therapy</a>
+                <a href="#services" role="menuitem">School Consultation</a>
               </div>
             </li>
             <li><a href="#conditions">Conditions</a></li>
@@ -92,11 +93,11 @@ export function SiteHeader() {
         aria-label="Mobile navigation"
       >
         <div className="drawer-head">
-          <span className="drawer-brand">Lorem Ipsum, MD</span>
+          <span className="drawer-brand">Minded Connections</span>
           <button className="drawer-close" onClick={() => setOpen(false)} aria-label="Close menu">×</button>
         </div>
         <nav>
-          <a href="#about" onClick={() => setOpen(false)}>About</a>
+          <a href="#about" onClick={() => setOpen(false)}>About Dr. Hernandez</a>
           <a href="#services" onClick={() => setOpen(false)}>Services</a>
           <a href="#conditions" onClick={() => setOpen(false)}>Conditions</a>
           <a href="#process" onClick={() => setOpen(false)}>For Families</a>

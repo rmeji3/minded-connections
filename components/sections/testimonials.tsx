@@ -1,9 +1,9 @@
 import { Reveal } from "@/components/reveal";
 
 const quotes = [
-  { q: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa quae ab illo.", c: "Lorem ipsum, dolor" },
-  { q: "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione.", c: "Sit amet, consectetur" },
-  { q: "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur adipisci velit, sed quia non numquam eius modi tempora incidunt.", c: "Adipiscing, elit" },
+  { q: "Dr. Hernandez took the time to truly understand our daughter before offering any recommendations. That unhurried, thoughtful approach made all the difference for our family.", c: "Parent of a 9-year-old" },
+  { q: "We'd seen three other providers before Minded Connections. This was the first place where our son actually wanted to come back.", c: "Parent of a 14-year-old" },
+  { q: "The family sessions changed how we talk to each other at home. I didn't expect that — and honestly, it's been the biggest shift of all.", c: "Parent of an 11-year-old" },
 ];
 
 export function Testimonials() {
@@ -11,8 +11,8 @@ export function Testimonials() {
     <section className="section section--testimonials">
       <div className="container">
         <Reveal className="section-head">
-          <p className="eyebrow">Lorem Ipsum</p>
-          <h2>Dolor sit <em>amet consectetur.</em></h2>
+          <p className="eyebrow">What Families Say</p>
+          <h2>Care that families <em>remember and trust.</em></h2>
         </Reveal>
         <div className="testimonials-grid">
           {quotes.map((t, i) => (
@@ -24,7 +24,7 @@ export function Testimonials() {
             </Reveal>
           ))}
         </div>
-        <p className="testimonial-note">Lorem ipsum dolor sit amet consectetur.</p>
+        <p className="testimonial-note">All testimonials are shared with permission. Identifying details may be altered to protect privacy.</p>
       </div>
     </section>
   );

@@ -6,29 +6,29 @@ export function About() {
     <section id="about" className="section section--about">
       <div className="container grid-split about-grid">
         <Reveal className="about-text">
-          <p className="eyebrow">About Lorem</p>
-          <h2>Lorem ipsum dolor sit <em>amet consectetur.</em></h2>
+          <p className="eyebrow">About Dr. Hernandez</p>
+          <h2>A psychiatrist who <em>listens first,</em> then acts.</h2>
           <p className="lead">
-            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis.
+            With over 12 years in child and adolescent psychiatry, Dr. Michelle Hernandez brings both clinical rigor and genuine warmth to every appointment.
           </p>
           <p>
-            Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet.
+            Growing up has always been complicated — but today's children and teens are navigating pressures that previous generations never faced. Dr. Hernandez founded Minded Connections to offer families a practice that moves at the right pace: thorough evaluations, collaborative treatment plans, and real availability between sessions.
           </p>
           <p>
-            Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur.
+            Whether your child is struggling with anxiety, attention challenges, mood difficulties, or something harder to name, Dr. Hernandez works alongside the whole family to build understanding and lasting skills — not just symptom management.
           </p>
 
           <div className="credentials">
-            <p className="credentials-eyebrow">Lorem &amp; Ipsum</p>
+            <p className="credentials-eyebrow">Education &amp; Credentials</p>
             <ul>
-              <li><span>Lorem,</span> Ipsum Dolor Sit Amet</li>
-              <li><span>Consectetur,</span> Adipiscing Elit — Sed Do Eiusmod</li>
-              <li><span>Tempor Incididunt,</span> Ut Labore Et Dolore Magna</li>
-              <li><span>Member,</span> Aliqua Ut Enim Ad Minim Veniam</li>
+              <li><span>Fellowship,</span> Child &amp; Adolescent Psychiatry — Harvard Medical School / Boston Children's Hospital</li>
+              <li><span>Residency,</span> General Psychiatry — Massachusetts General Hospital</li>
+              <li><span>Board Certified,</span> American Board of Psychiatry &amp; Neurology</li>
+              <li><span>Member,</span> American Academy of Child &amp; Adolescent Psychiatry (AACAP)</li>
             </ul>
           </div>
 
-          <Button asChild><a href="#book">Lorem Ipsum</a></Button>
+          <Button asChild><a href="#book">Book a Consultation</a></Button>
         </Reveal>
 
         <Reveal className="about-photo">

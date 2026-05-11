@@ -1,10 +1,10 @@
 import { Reveal } from "@/components/reveal";
 
 const steps = [
-  { n: "01", title: "Lorem Ipsum", body: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque." },
-  { n: "02", title: "Dolor Sit", body: "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit consequuntur." },
-  { n: "03", title: "Amet Consectetur", body: "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet consectetur adipisci velit." },
-  { n: "04", title: "Adipiscing Elit", body: "Ut enim ad minima veniam quis nostrum exercitationem ullam corporis suscipit laboriosam aliquid." },
+  { n: "01", title: "Submit an Inquiry", body: "Fill out a brief form with your child's name, age, and the main concern. We read every submission personally — no automated filtering." },
+  { n: "02", title: "Intake Call", body: "Within one business day, our care coordinator calls to learn more about your family, answer your questions, and schedule your first appointment." },
+  { n: "03", title: "First Appointment", body: "A relaxed, 90-minute evaluation with Dr. Hernandez. Your child is seen. You are heard. A written treatment plan follows within one week." },
+  { n: "04", title: "Ongoing Care", body: "Regular sessions, medication check-ins, or both — continuously adjusted to match your child's progress and your family's goals." },
 ];
 
 export function Process() {
@@ -12,9 +12,9 @@ export function Process() {
     <section id="process" className="section">
       <div className="container">
         <Reveal className="section-head">
-          <p className="eyebrow">Lorem Ipsum</p>
-          <h2>From <em>dolor sit amet</em> to consectetur.</h2>
-          <p className="lead">Sed do eiusmod tempor incididunt ut labore et dolore.</p>
+          <p className="eyebrow">How It Works</p>
+          <h2>From first call to <em>lasting change.</em></h2>
+          <p className="lead">We keep our intake process simple and human — no long waits, no impersonal portals.</p>
         </Reveal>
 
         <ol className="process-steps">
