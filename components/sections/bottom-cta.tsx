@@ -6,11 +6,11 @@ export function BottomCta() {
       <Reveal>
         <div className="container bottom-cta-inner">
           <p className="eyebrow eyebrow--on-dark">You&rsquo;re in the right place.</p>
-          <h2 className="bottom-cta-headline">The first step is the <em>hardest part.</em></h2>
-          <p className="bottom-cta-sub">Many families feel relief just from reaching out. Let us take it from here.</p>
+          <h2 className="bottom-cta-headline">Many people feel relief just <em>from reaching out.</em></h2>
+          <p className="bottom-cta-sub">Let us take it from here — no referral needed, no long wait.</p>
           <div className="bottom-cta-actions">
             <a href="#book" className="btn-light">Book a Consultation</a>
-            <a href="tel:6175550142" className="btn-phone">Or call <span className="phone-num">(617) 555-0142</span></a>
+            <a href="tel:9095550142" className="btn-phone">Or call <span className="phone-num">(909) 555-0142</span></a>
           </div>
           <ul className="bottom-cta-points" role="list">
             <li><span className="check" aria-hidden="true">✓</span> No referral required</li>

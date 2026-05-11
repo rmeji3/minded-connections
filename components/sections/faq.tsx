@@ -5,7 +5,7 @@ import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/
 const faqs = [
   {
     q: "Does Dr. Hernandez accept insurance?",
-    a: "Minded Connections is an out-of-network provider. We provide detailed superbills after each appointment that you can submit to your insurance for reimbursement. Many families receive 50–80% back through out-of-network benefits. We're happy to walk you through the process.",
+    a: "Minded Connections is an out-of-network provider. We provide detailed superbills after each appointment that you can submit to your insurance for reimbursement. Reimbursement varies by plan — we're happy to help you understand your benefits before you commit.",
   },
   {
     q: "How long does the initial evaluation take?",
@@ -13,19 +13,19 @@ const faqs = [
   },
   {
     q: "Do you offer telehealth appointments?",
-    a: "Yes. We offer secure telehealth appointments for established patients and for families in our service area who prefer remote care. Whenever possible, we recommend the initial evaluation be conducted in person.",
+    a: "Yes. We offer secure telehealth appointments for established patients and for anyone in California who prefers remote care. Whenever possible, we recommend the initial evaluation be conducted in person.",
   },
   {
-    q: "What ages do you see?",
-    a: "Dr. Hernandez sees children and adolescents ages 4 through 18. Young adults transitioning to college (ages 18–22) may be considered on a case-by-case basis with an established patient relationship.",
+    q: "How quickly can I be seen?",
+    a: "New patient appointments are typically available within 2–3 weeks. We maintain a small cancellation list for patients with more urgent needs — please mention this when you reach out.",
   },
   {
-    q: "How quickly can we get an appointment?",
-    a: "New patient appointments are typically available within 2–3 weeks. We maintain a small cancellation list for families with more urgent needs — please mention this when you reach out.",
+    q: "What should I bring to the first appointment?",
+    a: "Any prior evaluations, records from previous providers, or a list of current medications are helpful but not required. Dr. Hernandez will guide you through what information is most useful during your intake call — there's no pressure to arrive with everything figured out.",
   },
   {
-    q: "What should we bring to the first appointment?",
-    a: "Any prior evaluations, school reports (IEPs, 504 plans), or records from previous providers are helpful but not required. Dr. Hernandez will guide you through what information is most useful during your intake call — there's no pressure to arrive with everything figured out.",
+    q: "Do I need a referral?",
+    a: "No referral is required to book an appointment at Minded Connections. You can reach out directly through the form below or by phone.",
   },
 ];
 

@@ -3,7 +3,7 @@ import { Reveal } from "@/components/reveal";
 const services = [
   {
     title: "Psychiatric Evaluation",
-    body: "A comprehensive, 90-minute assessment covering developmental history, behavioral patterns, school functioning, and family dynamics — so the full picture comes first.",
+    body: "A comprehensive, 90-minute assessment covering personal history, behavioral patterns, current functioning, and treatment goals — so the full picture comes first.",
     icon: <svg viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="currentColor" strokeWidth="1.2"><path d="M6 8h20M6 14h20M6 20h14M6 26h10" /><circle cx="26" cy="22" r="3" /></svg>,
   },
   {
@@ -13,18 +13,23 @@ const services = [
   },
   {
     title: "Individual Therapy",
-    body: "Weekly or biweekly sessions drawing on CBT, DBT, and play-based approaches — tailored to your child's age, temperament, and goals.",
+    body: "Weekly or biweekly sessions drawing on CBT, DBT, and mindfulness-based approaches — tailored to your temperament, history, and goals.",
     icon: <svg viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="currentColor" strokeWidth="1.2"><path d="M16 28s-10-6-10-14a6 6 0 0 1 10-4 6 6 0 0 1 10 4c0 8-10 14-10 14z" /></svg>,
   },
   {
-    title: "Family Therapy",
-    body: "Stronger family communication often changes everything. Sessions help parents and children build new language for difficult feelings and lasting connection.",
+    title: "Ongoing Care",
+    body: "Regular follow-up appointments to monitor progress, adjust treatment, and stay aligned with your goals as your life and needs evolve.",
     icon: <svg viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="currentColor" strokeWidth="1.2"><rect x="4" y="7" width="24" height="16" rx="2" /><path d="M12 27h8M16 23v4" /></svg>,
   },
   {
-    title: "School Consultation",
-    body: "Dr. Hernandez collaborates with teachers, counselors, and IEP teams to advocate for accommodations and support your child's success in the classroom.",
+    title: "Telehealth",
+    body: "Secure video appointments from wherever you are — same quality of care, without the commute. Available to patients throughout California.",
     icon: <svg viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="currentColor" strokeWidth="1.2"><path d="M4 26V8h24v18" /><path d="M4 26h24M11 14h10M11 20h6" /></svg>,
+  },
+  {
+    title: "Second Opinions",
+    body: "Unsure about a diagnosis or treatment plan? Dr. Hernandez offers thoughtful, independent evaluations for patients seeking clarity.",
+    icon: <svg viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="currentColor" strokeWidth="1.2"><circle cx="16" cy="16" r="11"/><path d="M16 10v6l4 2"/></svg>,
   },
 ];
 
@@ -34,8 +39,8 @@ export function Services() {
       <div className="container">
         <Reveal className="section-head">
           <p className="eyebrow">What We Offer</p>
-          <h2>Care that meets your child <em>where they are.</em></h2>
-          <p className="lead">Every service is designed around the whole child — not just a diagnosis or a checklist.</p>
+          <h2>Care that meets you <em>where you are.</em></h2>
+          <p className="lead">Every service is designed around you as a whole person — not just a diagnosis or a checklist.</p>
         </Reveal>
 
         <ul className="services-grid" role="list">

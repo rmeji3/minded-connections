@@ -9,22 +9,22 @@ export function About() {
           <p className="eyebrow">About Dr. Hernandez</p>
           <h2>A psychiatrist who <em>listens first,</em> then acts.</h2>
           <p className="lead">
-            With over 12 years in child and adolescent psychiatry, Dr. Michelle Hernandez brings both clinical rigor and genuine warmth to every appointment.
+            With over 12 years in psychiatry, Dr. Michelle Hernandez brings both clinical rigor and genuine warmth to every appointment.
           </p>
           <p>
-            Growing up has always been complicated — but today's children and teens are navigating pressures that previous generations never faced. Dr. Hernandez founded Minded Connections to offer families a practice that moves at the right pace: thorough evaluations, collaborative treatment plans, and real availability between sessions.
+            Mental health care works best when the relationship between patient and provider is built on trust, time, and honest communication. Dr. Hernandez founded Minded Connections to offer a practice that moves at the right pace: thorough evaluations, collaborative treatment plans, and real availability between sessions.
           </p>
           <p>
-            Whether your child is struggling with anxiety, attention challenges, mood difficulties, or something harder to name, Dr. Hernandez works alongside the whole family to build understanding and lasting skills — not just symptom management.
+            Whether you're navigating anxiety, a mood disorder, a difficult life transition, or something harder to name, Dr. Hernandez works alongside you to build understanding and lasting skills — not just symptom management.
           </p>
 
           <div className="credentials">
             <p className="credentials-eyebrow">Education &amp; Credentials</p>
             <ul>
-              <li><span>Fellowship,</span> Child &amp; Adolescent Psychiatry — Harvard Medical School / Boston Children's Hospital</li>
+              <li><span>Fellowship,</span> Psychiatry — Harvard Medical School / Massachusetts General Hospital</li>
               <li><span>Residency,</span> General Psychiatry — Massachusetts General Hospital</li>
               <li><span>Board Certified,</span> American Board of Psychiatry &amp; Neurology</li>
-              <li><span>Member,</span> American Academy of Child &amp; Adolescent Psychiatry (AACAP)</li>
+              <li><span>Member,</span> American Psychiatric Association (APA)</li>
             </ul>
           </div>
 

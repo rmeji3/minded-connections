@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Minded Connections — Child & Adolescent Psychiatry",
-  description: "Evidence-based psychiatric care for children and teens ages 4-18. Dr. Michelle Hernandez, MD offers evaluations, therapy, and medication management in Corona, CA.",
+  title: "Minded Connections — Psychiatry in Corona, CA",
+  description: "Evidence-based psychiatric care for adults. Dr. Michelle Hernandez, MD offers evaluations, therapy, and medication management in Corona, CA, with telehealth available throughout California.",
 };
 
 export default function RootLayout({

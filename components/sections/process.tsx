@@ -1,10 +1,10 @@
 import { Reveal } from "@/components/reveal";
 
 const steps = [
-  { n: "01", title: "Submit an Inquiry", body: "Fill out a brief form with your child's name, age, and the main concern. We read every submission personally — no automated filtering." },
-  { n: "02", title: "Intake Call", body: "Within one business day, our care coordinator calls to learn more about your family, answer your questions, and schedule your first appointment." },
-  { n: "03", title: "First Appointment", body: "A relaxed, 90-minute evaluation with Dr. Hernandez. Your child is seen. You are heard. A written treatment plan follows within one week." },
-  { n: "04", title: "Ongoing Care", body: "Regular sessions, medication check-ins, or both — continuously adjusted to match your child's progress and your family's goals." },
+  { n: "01", title: "Submit an Inquiry", body: "Fill out a brief form with your name and the main concern. We read every submission personally — no automated filtering." },
+  { n: "02", title: "Intake Call", body: "Within one business day, our care coordinator calls to learn more about you, answer your questions, and schedule your first appointment." },
+  { n: "03", title: "First Appointment", body: "A relaxed, 90-minute evaluation with Dr. Hernandez. You are seen. You are heard. A written treatment plan follows within one week." },
+  { n: "04", title: "Ongoing Care", body: "Regular sessions, medication check-ins, or both — continuously adjusted to match your progress and your evolving goals." },
 ];
 
 export function Process() {

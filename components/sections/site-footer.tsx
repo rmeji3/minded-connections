@@ -4,7 +4,7 @@ export function SiteFooter() {
       <div className="container footer-grid">
         <div className="footer-col footer-brand-col">
           <p className="footer-brand">Minded Connections</p>
-          <p className="footer-tag">Child &amp; adolescent psychiatry for families who want a partner in care.</p>
+          <p className="footer-tag">Psychiatry for people who want a partner in their care.</p>
         </div>
 
         <nav className="footer-col" aria-label="Services">
@@ -13,8 +13,8 @@ export function SiteFooter() {
             <li><a href="#services">Psychiatric Evaluation</a></li>
             <li><a href="#services">Medication Management</a></li>
             <li><a href="#services">Individual Therapy</a></li>
-            <li><a href="#services">Family Therapy</a></li>
-            <li><a href="#services">School Consultation</a></li>
+            <li><a href="#services">Ongoing Care</a></li>
+            <li><a href="#services">Telehealth</a></li>
           </ul>
         </nav>
 
@@ -34,7 +34,7 @@ export function SiteFooter() {
           <address>
             1450 Magnolia Ave, Suite 210<br />
             Corona, CA 92879<br />
-            <a href="tel:6175550142" className="mono-num">(617) 555-0142</a><br />
+            <a href="tel:9095550142" className="mono-num">(909) 555-0142</a><br />
             <a href="mailto:hello@mindedconnections.com">hello@mindedconnections.com</a>
           </address>
           <a href="#book" className="btn-text btn-text--on-dark">Book a consultation →</a>

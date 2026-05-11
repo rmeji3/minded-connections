@@ -20,7 +20,7 @@ export function TrustBar() {
           <span className="trust-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.3"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>
           </span>
-          <span>Ages 4–18 Accepted</span>
+          <span>12+ Years in Practice</span>
         </div>
         <div className="trust-divider" aria-hidden="true" />
         <div className="trust-item">

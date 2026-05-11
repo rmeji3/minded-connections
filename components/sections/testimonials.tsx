@@ -1,9 +1,9 @@
 import { Reveal } from "@/components/reveal";
 
 const quotes = [
-  { q: "Dr. Hernandez took the time to truly understand our daughter before offering any recommendations. That unhurried, thoughtful approach made all the difference for our family.", c: "Parent of a 9-year-old" },
-  { q: "We'd seen three other providers before Minded Connections. This was the first place where our son actually wanted to come back.", c: "Parent of a 14-year-old" },
-  { q: "The family sessions changed how we talk to each other at home. I didn't expect that — and honestly, it's been the biggest shift of all.", c: "Parent of an 11-year-old" },
+  { q: "Dr. Hernandez took the time to truly understand what I was going through before offering any recommendations. That unhurried, thoughtful approach made all the difference.", c: "Patient, Corona CA" },
+  { q: "I'd seen two other providers before Minded Connections. This was the first place where I actually wanted to come back.", c: "Patient, Riverside CA" },
+  { q: "The sessions changed how I understand myself. I didn't expect that — and honestly, it's been the biggest shift of all.", c: "Patient, Corona CA" },
 ];
 
 export function Testimonials() {
@@ -11,8 +11,8 @@ export function Testimonials() {
     <section className="section section--testimonials">
       <div className="container">
         <Reveal className="section-head">
-          <p className="eyebrow">What Families Say</p>
-          <h2>Care that families <em>remember and trust.</em></h2>
+          <p className="eyebrow">What Patients Say</p>
+          <h2>Care that patients <em>remember and trust.</em></h2>
         </Reveal>
         <div className="testimonials-grid">
           {quotes.map((t, i) => (

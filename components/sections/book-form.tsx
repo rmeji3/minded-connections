@@ -9,7 +9,7 @@ export function BookForm() {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
-    if (!fd.get("child") || !fd.get("parent") || !fd.get("email") || !fd.get("age")) {
+    if (!fd.get("name") || !fd.get("email")) {
       setStatus({ kind: "error", msg: "Please complete the required fields." });
       return;
     }
@@ -35,18 +35,13 @@ export function BookForm() {
           <form className="book-form" id="book-form" noValidate onSubmit={onSubmit}>
             <div className="form-row form-row--two">
               <div className="form-field">
-                <label htmlFor="f-child">Child's first name <span className="req">(required)</span></label>
-                <input id="f-child" name="child" type="text" autoComplete="given-name" aria-required="true" required />
+                <label htmlFor="f-name">Your name <span className="req">(required)</span></label>
+                <input id="f-name" name="name" type="text" autoComplete="name" aria-required="true" required />
               </div>
               <div className="form-field">
-                <label htmlFor="f-age">Child's age <span className="req">(required)</span></label>
-                <input id="f-age" name="age" type="number" min={2} max={18} aria-required="true" required />
+                <label htmlFor="f-dob">Date of birth</label>
+                <input id="f-dob" name="dob" type="date" />
               </div>
-            </div>
-
-            <div className="form-field">
-              <label htmlFor="f-parent">Parent or guardian name <span className="req">(required)</span></label>
-              <input id="f-parent" name="parent" type="text" autoComplete="name" aria-required="true" required />
             </div>
 
             <div className="form-row form-row--two">
@@ -67,14 +62,13 @@ export function BookForm() {
                 <option>Psychology Today</option>
                 <option>Doctor referral</option>
                 <option>Friend or family member</option>
-                <option>School or counselor</option>
                 <option>Google search</option>
                 <option>Other</option>
               </select>
             </div>
 
             <div className="form-field">
-              <label htmlFor="f-note">Tell us a little about your child's needs</label>
+              <label htmlFor="f-note">What brings you in?</label>
               <textarea id="f-note" name="note" rows={4} placeholder="No pressure to have the right words — just share what's on your mind." />
             </div>
 

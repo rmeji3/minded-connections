@@ -57,7 +57,7 @@ export function SiteHeader() {
               </div>
             </li>
             <li><a href="#conditions">Conditions</a></li>
-            <li><a href="#process">For Families</a></li>
+            <li><a href="#process">How It Works</a></li>
             <li><a href="#faq">FAQs</a></li>
           </ul>
 
@@ -100,7 +100,7 @@ export function SiteHeader() {
           <a href="#about" onClick={() => setOpen(false)}>About Dr. Hernandez</a>
           <a href="#services" onClick={() => setOpen(false)}>Services</a>
           <a href="#conditions" onClick={() => setOpen(false)}>Conditions</a>
-          <a href="#process" onClick={() => setOpen(false)}>For Families</a>
+          <a href="#process" onClick={() => setOpen(false)}>How It Works</a>
           <a href="#faq" onClick={() => setOpen(false)}>FAQs</a>
           <a href="#" className="drawer-portal" onClick={() => setOpen(false)}>Patient Portal</a>
         </nav>

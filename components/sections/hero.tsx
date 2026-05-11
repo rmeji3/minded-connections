@@ -6,15 +6,15 @@ export function Hero() {
     <section id="hero" aria-labelledby="hero-heading">
       <div className="hero-text-panel">
         <div className="hero-inner">
-          <p className="hero-credential">Board-Certified Child &amp; Adolescent Psychiatrist</p>
+          <p className="hero-credential">Board-Certified Psychiatrist</p>
           <h1 id="hero-heading">
-            Thoughtful mental health care for children and teens — <em>because growing up is hard.</em>
+            Mental health care that meets you <em>where you are.</em>
           </h1>
           <p className="lead hero-lead">
-            Minded Connections offers evidence-based psychiatric care for ages 4–18, in a warm, unhurried practice built around your family's needs.
+            Minded Connections offers evidence-based psychiatric care in a warm, unhurried practice built around your needs — not a waiting list.
           </p>
           <div className="hero-cta-row">
-            <Button asChild><a href="#book">Book a Free Consultation</a></Button>
+            <Button asChild><a href="#book">Book a Consultation</a></Button>
             <a href="#about" className="btn-text">Learn how we can help <span aria-hidden="true">→</span></a>
           </div>
           <div className="hero-trust">
