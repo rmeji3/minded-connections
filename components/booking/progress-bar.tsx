@@ -89,8 +89,8 @@ export function ProgressBar({ step, onStepClick }: ProgressBarProps) {
                   aria-label={`Step ${s.n}: ${s.label}`}
                   style={{
                     width: 26, height: 26, borderRadius: "50%",
-                    border: isActive ? "1.5px solid var(--sage-300)" : "1.5px solid transparent",
-                    background: isActive ? "var(--sage-50)" : isDone ? "var(--sage-500)" : "var(--cream)",
+                    border: isActive ? "1.5px solid var(--sage-300)" : isDone ? "1.5px solid transparent" : "1.5px solid var(--stone-300)",
+                    background: isActive ? "var(--sage-50)" : isDone ? "var(--sage-500)" : "transparent",
                     color: isActive ? "var(--sage-700)" : isDone ? "white" : "var(--stone-500)",
                     fontSize: "0.75rem", fontFamily: "var(--font-detail)",
                     cursor: isDone ? "pointer" : "default",

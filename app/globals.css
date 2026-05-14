@@ -319,3 +319,5 @@ address{font-style:normal;font-size:0.9rem;line-height:1.8;color:var(--sage-100)
 .time-slot-btn:disabled{opacity:.38;cursor:not-allowed}
 .time-slot-btn[aria-pressed="true"]{background:var(--sage-500);border-color:var(--sage-500);color:#fff}
 .time-slot-btn:not(:disabled):not([aria-pressed="true"]):hover{border-color:var(--sage-400);background:var(--sage-50,#f0f4f1)}
+
+

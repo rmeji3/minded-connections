@@ -85,35 +85,42 @@ export default function AppointmentsPage() {
           </div>
 
           {/* Tab bar */}
-          <div className="flex items-center gap-0 overflow-x-auto" style={{ marginBottom: "1.75rem", paddingBottom: 2 }}>
-            <div style={{ flex: 1 }}>
-              <div style={{ display: "inline-flex", background: "white", border: "1px solid var(--linen)", borderRadius: 100, padding: "3px", gap: 2 }}>
-                {TABS.map((t) => {
-                  const active = tab === t.id;
-                  return (
-                    <button
-                      key={t.id}
-                      onClick={() => setTab(t.id)}
-                      style={{
-                        display: "inline-flex", alignItems: "center", gap: "0.4rem",
-                        padding: "0.45rem 1rem", borderRadius: 100, border: "none",
-                        background: active ? "var(--sage-700)" : "transparent",
-                        color: active ? "white" : "var(--stone-600)",
-                        fontSize: "0.875rem", fontFamily: "var(--font-body)",
-                        cursor: "pointer", whiteSpace: "nowrap",
-                        fontWeight: active ? 500 : 400, transition: "all 150ms",
-                      }}
-                    >
-                      {t.label}
-                      <span style={{ fontSize: "0.75rem", opacity: 0.75, fontFamily: "var(--font-detail)" }}>{t.count}</span>
-                    </button>
-                  );
-                })}
+          <div style={{ marginBottom: "1.75rem" }}>
+            <div className="flex items-center gap-0" style={{ paddingBottom: 2 }}>
+              <div style={{ flex: 1 }}>
+                <div style={{ display: "inline-flex", background: "white", border: "1px solid var(--linen)", borderRadius: 100, padding: "3px", gap: 2 }}>
+                  {TABS.map((t) => {
+                    const active = tab === t.id;
+                    return (
+                      <button
+                        key={t.id}
+                        onClick={() => setTab(t.id)}
+                        style={{
+                          display: "inline-flex", alignItems: "center", gap: "0.4rem",
+                          padding: "0.45rem 1rem", borderRadius: 100, border: "none",
+                          background: active ? "var(--sage-700)" : "transparent",
+                          color: active ? "white" : "var(--stone-600)",
+                          fontSize: "0.875rem", fontFamily: "var(--font-body)",
+                          cursor: "pointer", whiteSpace: "nowrap",
+                          fontWeight: active ? 500 : 400, transition: "all 150ms",
+                        }}
+                      >
+                        {t.label}
+                        <span style={{ fontSize: "0.75rem", opacity: 0.75, fontFamily: "var(--font-detail)" }}>{t.count}</span>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
+              <span className="hidden sm:inline" style={{ fontSize: "0.8125rem", fontFamily: "var(--font-body)", color: "var(--stone-500)", whiteSpace: "nowrap", paddingLeft: "1rem" }}>
+                Time zone <span style={{ fontFamily: "var(--font-detail)" }}>Pacific (UTC-7)</span>
+              </span>
             </div>
-            <span style={{ fontSize: "0.8125rem", fontFamily: "var(--font-body)", color: "var(--stone-500)", whiteSpace: "nowrap", paddingLeft: "1rem" }}>
-              Time zone <span style={{ fontFamily: "var(--font-detail)" }}>Pacific (UTC-7)</span>
-            </span>
+            <div className="flex justify-end sm:hidden" style={{ marginTop: "0.5rem" }}>
+              <span style={{ fontSize: "0.8125rem", fontFamily: "var(--font-body)", color: "var(--stone-500)" }}>
+                Time zone <span style={{ fontFamily: "var(--font-detail)" }}>Pacific (UTC-7)</span>
+              </span>
+            </div>
           </div>
 
           {/* ── Upcoming ── */}

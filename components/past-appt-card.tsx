@@ -8,12 +8,12 @@ interface PastApptCardProps {
 
 export function PastApptCard({ appt }: PastApptCardProps) {
   return (
-    <article className="appt-card">
-      <div className="flex gap-4">
+    <article className="bg-[var(--warm-white)] border border-[var(--linen)] rounded-[10px] px-4 py-4 sm:px-5 sm:py-[1.125rem] transition-shadow hover:shadow-[0_2px_12px_rgba(39,35,32,.06)]">
+      <div className="flex gap-3 sm:gap-4">
         {/* Date block */}
-        <div className="appt-date-block appt-date-block--past">
+        <div className="flex flex-col items-center justify-center gap-0.5 shrink-0 w-[68px] h-[68px] sm:w-[96px] sm:h-[96px] rounded-lg sm:rounded-xl text-center bg-[var(--linen)]">
           <span style={{ fontSize: "0.6875rem", color: "var(--stone-500)", textTransform: "uppercase", fontFamily: "var(--font-body)", letterSpacing: "0.06em" }}>{appt.month}</span>
-          <span style={{ fontSize: "1.625rem", color: "var(--ink)", fontFamily: "var(--font-display)", lineHeight: 1 }}>{appt.day}</span>
+          <span className="text-[1.375rem] sm:text-[1.625rem] leading-none" style={{ color: "var(--ink)", fontFamily: "var(--font-display)" }}>{appt.day}</span>
           <span style={{ fontSize: "0.6875rem", color: "var(--stone-500)", textTransform: "uppercase", fontFamily: "var(--font-body)", letterSpacing: "0.04em" }}>{appt.dow}</span>
         </div>
 
@@ -30,24 +30,18 @@ export function PastApptCard({ appt }: PastApptCardProps) {
             </div>
           </div>
 
-          <div
-            className="flex flex-wrap items-center"
-            style={{ gap: "0.25rem 0.5rem", fontSize: "0.875rem", color: "var(--stone-700)", marginBottom: appt.note || appt.location ? "0.625rem" : 0 }}
-          >
-            <span style={{ fontFamily: "var(--font-detail)", color: "var(--ink)" }}>{appt.timeRange}</span>
-            <span style={{ color: "var(--stone-300)" }}>·</span>
-            <span>{appt.provider}</span>
-            {appt.location && (
-              <>
-                <span style={{ color: "var(--stone-300)" }}>·</span>
-                <span style={{ color: "var(--stone-500)" }}>{appt.location}</span>
-              </>
-            )}
+          <div style={{ marginBottom: appt.location ? "0.625rem" : 0 }}>
+            <div style={{ fontFamily: "var(--font-detail)", fontSize: "0.875rem", color: "var(--ink)", marginBottom: "0.2rem" }}>{appt.timeRange}</div>
+            <div className="flex items-center flex-wrap" style={{ gap: "0.25rem 0.4rem", fontSize: "0.875rem", color: "var(--stone-700)" }}>
+              <span className="whitespace-nowrap">{appt.provider}</span>
+              {appt.location && (
+                <>
+                  <span style={{ color: "var(--stone-300)" }}>·</span>
+                  <span className="whitespace-nowrap" style={{ color: "var(--stone-500)" }}>{appt.location}</span>
+                </>
+              )}
+            </div>
           </div>
-
-          {appt.note && (
-            <div className="appt-note appt-note--past">{appt.note}</div>
-          )}
         </div>
 
         {/* Desktop actions */}
@@ -70,6 +64,11 @@ export function PastApptCard({ appt }: PastApptCardProps) {
       <div className="sm:hidden mt-2 flex gap-2">
         <GhostBtn small>VISIT SUMMARY</GhostBtn>
       </div>
+
+      {/* Note — full card width */}
+      {appt.note && (
+        <div className="mt-3 text-[0.8125rem] text-[var(--stone-500)] leading-[1.65] px-3 py-2 bg-[var(--cream)] rounded-md border-l-[2.5px] border-[var(--stone-300)]">{appt.note}</div>
+      )}
     </article>
   );
 }
