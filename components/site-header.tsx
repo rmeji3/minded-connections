@@ -62,7 +62,7 @@ export function SiteHeader() {
           </ul>
 
           <div className="nav-cta">
-            <a href="#" className="nav-portal">Patient Portal</a>
+            <Link href="/login" className="nav-portal">Patient Portal</Link>
             <Button asChild size="sm"><a href="#book">Book a Consultation <span aria-hidden="true">→</span></a></Button>
           </div>
 
@@ -102,7 +102,7 @@ export function SiteHeader() {
           <a href="#conditions" onClick={() => setOpen(false)}>Conditions</a>
           <a href="#process" onClick={() => setOpen(false)}>How It Works</a>
           <a href="#faq" onClick={() => setOpen(false)}>FAQs</a>
-          <a href="#" className="drawer-portal" onClick={() => setOpen(false)}>Patient Portal</a>
+          <Link href="/login" className="drawer-portal" onClick={() => setOpen(false)}>Patient Portal</Link>
         </nav>
         <Button asChild className="drawer-cta"><a href="#book" onClick={() => setOpen(false)}>Book a Consultation</a></Button>
       </aside>

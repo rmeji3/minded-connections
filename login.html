@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sign in — Patient Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400&family=DM+Sans:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="shared.css" />
+<style>
+  .login-page {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+  }
+
+  /* Left panel — sage dark */
+  .login-aside {
+    background: var(--sage-700);
+    color: var(--warm-white);
+    padding: clamp(2rem, 4vw, 3.5rem) clamp(2rem, 6vw, 5rem);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+  .login-aside::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 80% 20%, rgba(154,181,147,.14), transparent 55%),
+      radial-gradient(circle at 10% 90%, rgba(110,151,104,.10), transparent 60%);
+    pointer-events: none;
+  }
+  .login-brand {
+    position: relative;
+    display: inline-flex; align-items: center; gap: var(--sp-3);
+    color: var(--warm-white);
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    text-decoration: none;
+  }
+  .login-brand-md { font-style: italic; color: var(--sage-200); }
+  .login-aside-body {
+    position: relative;
+    margin-top: auto;
+    margin-bottom: auto;
+    max-width: 480px;
+  }
+  .login-aside-eyebrow {
+    font-family: var(--font-body);
+    font-size: .8125rem;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(228,235,226,.78);
+    margin: 0 0 var(--sp-6);
+    display: inline-flex; align-items: center; gap: var(--sp-3);
+  }
+  .login-aside-eyebrow::before {
+    content: ""; width: 28px; height: 1px; background: var(--sage-300);
+  }
+  .login-aside h1 {
+    font-size: clamp(2.25rem, 4.4vw, 3.4rem);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    color: var(--warm-white);
+    margin: 0 0 var(--sp-5);
+  }
+  .login-aside h1 em { color: var(--sage-200); }
+  .login-aside-lead {
+    font-size: 1.05rem;
+    color: rgba(228,235,226,.85);
+    max-width: 38ch;
+    font-weight: 300;
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  .login-aside-foot {
+    position: relative;
+    margin-top: var(--sp-8);
+    display: flex; flex-direction: column; gap: var(--sp-4);
+  }
+  .aside-foot-row {
+    display: flex; align-items: center; gap: var(--sp-3);
+    font-family: var(--font-body); font-size: .8125rem;
+    color: rgba(228,235,226,.7); letter-spacing: 0.02em;
+  }
+  .aside-foot-row .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--sage-300);
+    box-shadow: 0 0 0 4px rgba(154,181,147,.18);
+  }
+  .aside-foot-row svg { color: var(--sage-300); }
+  .aside-crisis {
+    margin-top: var(--sp-3);
+    padding: var(--sp-4);
+    background: rgba(28,48,25,.55);
+    border-left: 2px solid var(--sage-400);
+    border-radius: 0 4px 4px 0;
+    font-size: .8125rem;
+    line-height: 1.65;
+    color: var(--sage-200);
+  }
+  .aside-crisis strong { color: var(--warm-white); font-weight: 400; font-family: var(--font-detail); }
+
+  /* Right panel — form */
+  .login-main {
+    background: var(--warm-white);
+    padding: clamp(2rem, 4vw, 3.5rem) clamp(1.5rem, 5vw, 4.5rem);
+    display: flex; flex-direction: column;
+    position: relative;
+  }
+  .login-top {
+    display: flex; justify-content: flex-end; align-items: center;
+    gap: var(--sp-5);
+    font-size: .875rem;
+    color: var(--stone-500);
+  }
+  .login-top a {
+    color: var(--ink);
+    border-bottom: 1px solid var(--linen);
+    padding-bottom: 1px;
+  }
+  .login-top a:hover { color: var(--sage-600); border-color: var(--sage-400); }
+  .login-card {
+    margin: auto 0;
+    max-width: 440px;
+    width: 100%;
+    align-self: center;
+    padding-block: var(--sp-10);
+  }
+  .login-card .eyebrow { margin-bottom: var(--sp-3); }
+  .login-card h2 {
+    font-size: clamp(2rem, 3vw, 2.5rem);
+    line-height: 1.15;
+    margin: 0 0 var(--sp-3);
+  }
+  .login-card .sub {
+    font-size: .98rem;
+    color: var(--stone-700);
+    margin: 0 0 var(--sp-8);
+    max-width: 36ch;
+  }
+  form { display: flex; flex-direction: column; gap: var(--sp-5); }
+  .field { display: flex; flex-direction: column; }
+  .field-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: .4rem;
+  }
+  .field-row label { margin: 0; }
+  .field-row a {
+    font-size: .8125rem;
+    color: var(--sage-600);
+    border-bottom: 1px solid var(--sage-200);
+    padding-bottom: 1px;
+  }
+  .input-affix {
+    position: relative;
+  }
+  .input-affix svg {
+    position: absolute;
+    left: .95rem; top: 50%;
+    transform: translateY(-50%);
+    color: var(--stone-500);
+    pointer-events: none;
+  }
+  .input-affix input { padding-left: 2.7rem; }
+  .toggle-pw {
+    position: absolute; right: .6rem; top: 50%;
+    transform: translateY(-50%);
+    background: transparent; border: none;
+    color: var(--stone-500);
+    font-family: var(--font-body); font-size: .78rem;
+    letter-spacing: .08em; text-transform: uppercase;
+    padding: .35rem .55rem; border-radius: 3px;
+  }
+  .toggle-pw:hover { color: var(--sage-600); background: var(--sage-50); }
+
+  .row-between {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: var(--sp-4);
+    margin-top: -.2rem;
+  }
+  .check {
+    display: inline-flex; align-items: center; gap: .55rem;
+    font-size: .875rem; color: var(--stone-700); font-weight: 300;
+    user-select: none;
+  }
+  .check input[type="checkbox"] {
+    width: 17px; height: 17px;
+    accent-color: var(--sage-500);
+    margin: 0;
+  }
+
+  .divider {
+    display: flex; align-items: center; gap: var(--sp-3);
+    color: var(--stone-500); font-size: .75rem;
+    letter-spacing: .12em; text-transform: uppercase;
+    margin-block: var(--sp-2);
+  }
+  .divider::before, .divider::after {
+    content: ""; height: 1px; flex: 1; background: var(--linen);
+  }
+
+  .alt-login {
+    display: inline-flex; align-items: center; justify-content: center; gap: var(--sp-3);
+    padding: .8rem 1.25rem;
+    background: var(--warm-white);
+    color: var(--ink);
+    font-family: var(--font-body); font-size: .875rem; font-weight: 400;
+    border: 1.5px solid var(--linen);
+    border-radius: 5px;
+    width: 100%;
+    transition: border-color 180ms, background 180ms;
+  }
+  .alt-login:hover { border-color: var(--sage-300); background: var(--sage-50); color: var(--ink); }
+
+  .help-foot {
+    margin-top: var(--sp-6);
+    font-size: .875rem;
+    color: var(--stone-700);
+  }
+  .help-foot a {
+    color: var(--sage-600);
+    border-bottom: 1px solid var(--sage-200);
+    padding-bottom: 1px;
+  }
+
+  .legal {
+    margin-top: auto;
+    font-size: .75rem;
+    color: var(--stone-500);
+    display: flex; justify-content: space-between; gap: var(--sp-4);
+    padding-top: var(--sp-6);
+  }
+  .legal a { color: var(--stone-500); }
+  .legal a:hover { color: var(--sage-600); }
+
+  @media (max-width: 900px) {
+    .login-page { grid-template-columns: 1fr; }
+    .login-aside { padding-block: var(--sp-8); }
+    .login-aside-body { margin-block: var(--sp-6); }
+    .legal { flex-direction: column; gap: var(--sp-2); }
+  }
+</style>
+</head>
+<body>
+  <main class="login-page">
+    <aside class="login-aside" data-screen-label="Login · Aside">
+      <a href="#" class="login-brand">
+        <span class="brand-mark brand-mark--on-dark">M</span>
+        <span>Minded Connections <span class="login-brand-md">— md</span></span>
+      </a>
+
+      <div class="login-aside-body">
+        <p class="login-aside-eyebrow">Patient portal</p>
+        <h1>Continue your <em>care, securely</em>.</h1>
+        <p class="login-aside-lead">
+          Message Dr. Hernandez, review medications, request refills, and join your
+          telehealth visits — all in one private space.
+        </p>
+      </div>
+
+      <div class="login-aside-foot">
+        <div class="aside-foot-row">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          HIPAA-compliant · 256-bit encryption
+        </div>
+        <div class="aside-foot-row">
+          <span class="dot"></span>
+          Systems operating normally
+        </div>
+        <p class="aside-crisis">
+          In crisis? Call or text <strong>988</strong> for the Suicide &amp; Crisis Lifeline, or dial <strong>911</strong>. This portal is not monitored for emergencies.
+        </p>
+      </div>
+    </aside>
+
+    <section class="login-main">
+      <div class="login-top">
+        <span>New patient?</span>
+        <a href="#">Request an account</a>
+      </div>
+
+      <div class="login-card">
+        <span class="eyebrow">Sign in</span>
+        <h2>Welcome <em>back</em>.</h2>
+        <p class="sub">Use the email address you provided during intake.</p>
+
+        <form id="login-form" novalidate>
+          <div class="field">
+            <label for="email">Email address</label>
+            <div class="input-affix">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="m3 7 9 6 9-6"></path></svg>
+              <input id="email" name="email" type="email" autocomplete="username" value="sarah.chen@example.com" placeholder="you@email.com" required />
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="field-row">
+              <label for="password">Password</label>
+              <a href="#">Forgot password?</a>
+            </div>
+            <div class="input-affix">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
+              <input id="password" name="password" type="password" autocomplete="current-password" value="demopass" required />
+              <button type="button" class="toggle-pw" data-toggle-pw aria-label="Show password">Show</button>
+            </div>
+          </div>
+
+          <div class="row-between">
+            <label class="check">
+              <input type="checkbox" name="remember" checked />
+              Keep me signed in
+            </label>
+          </div>
+
+          <button type="submit" class="btn-primary btn-primary--full">Sign in to portal</button>
+
+          <div class="divider"><span>or</span></div>
+
+          <button type="button" class="alt-login">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4z"></path><path d="M22 2 11 13"></path></svg>
+            Sign in with a one-time email link
+          </button>
+        </form>
+
+        <p class="help-foot">
+          Trouble accessing your account? Email
+          <a href="/cdn-cgi/l/email-protection#c6b6a9b4b2a7aa86abafa8a2a3a2a5a9a8a8a3a5b2afa9a8b5e8a3bea7abb6aaa3"><span class="__cf_email__" data-cfemail="93e3fce1e7f2ffd3fefafdf7f6f7f0fcfdfdf6f0e7fafcfde0bdf6ebf2fee3fff6">[email&#160;protected]</span></a>
+          or call <span class="mono">(951) 555-0102</span>.
+        </p>
+      </div>
+
+      <div class="legal">
+        <span>© 2026 Minded Connections, Inc. · CA PMC #00000</span>
+        <span>
+          <a href="#">Privacy</a> &nbsp;·&nbsp; <a href="#">Terms</a> &nbsp;·&nbsp; <a href="#">HIPAA notice</a>
+        </span>
+      </div>
+    </section>
+  </main>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  // Show/hide password
+  document.querySelectorAll('[data-toggle-pw]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const input = btn.previousElementSibling.tagName === 'INPUT' ? btn.previousElementSibling : btn.parentElement.querySelector('input');
+      const showing = input.type === 'text';
+      input.type = showing ? 'password' : 'text';
+      btn.textContent = showing ? 'Show' : 'Hide';
+    });
+  });
+
+  // No-auth: any submit goes to portal
+  document.getElementById('login-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    window.location.href = 'portal.html';
+  });
+</script>
+</body>
+</html>
