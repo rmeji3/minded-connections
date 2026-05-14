@@ -313,6 +313,14 @@ address{font-style:normal;font-size:0.9rem;line-height:1.8;color:var(--sage-100)
 .portal-foot a:hover{color:var(--sage-600)}
 .portal-foot .crisis-band{color:var(--stone-700)}
 .portal-foot .crisis-band strong{font-family:var(--font-detail);font-weight:400;color:var(--ink)}
+/* Portal header responsive visibility */
+.portal-avatar-wrap { display: none; }
+@media (min-width: 64rem) { .portal-avatar-wrap { display: flex; align-items: center; } }
+.portal-hamburger-wrap { display: flex; }
+@media (min-width: 64rem) { .portal-hamburger-wrap { display: none; } }
+.portal-mobile-drawer { display: block; }
+@media (min-width: 64rem) { .portal-mobile-drawer { display: none; } }
+
 @keyframes wizardFadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 .wizard-step{animation:wizardFadeIn 0.32s cubic-bezier(0.22,1,0.36,1) both}
 .time-slot-btn{border:1.5px solid var(--linen);border-radius:6px;padding:.625rem 0;min-height:40px;text-align:center;font-size:.8125rem;font-family:var(--font-detail);transition:border-color 150ms,background 150ms;width:100%;cursor:pointer;background:var(--warm-white);color:var(--ink)}

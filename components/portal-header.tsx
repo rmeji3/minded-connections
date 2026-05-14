@@ -1,4 +1,5 @@
 "use client";
+import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -80,55 +81,136 @@ const NAV_ITEMS: {
 
 export function PortalHeader({ activePage }: PortalHeaderProps) {
   const router = useRouter();
+  const [open, setOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open]);
 
   const handleSignOut = () => {
-    if (confirm("Sign out of the patient portal?")) {
-      router.push("/login");
-    }
+    if (confirm("Sign out of the patient portal?")) router.push("/login");
   };
 
   return (
-    <header
-      style={{
-        position: "sticky",
-        top: 0,
-        zIndex: 100,
-        background: "rgba(248,246,242,.97)",
-        backdropFilter: "blur(10px)",
-        WebkitBackdropFilter: "blur(10px)",
-        borderBottom: "1px solid var(--linen)",
-      }}
-    >
-      <div
-        className="flex items-center"
+    <>
+      <header
         style={{
-          maxWidth: 1320,
-          marginInline: "auto",
-          padding: "0 clamp(1.25rem,4vw,2.5rem)",
-          height: 62,
-          gap: "1.5rem",
+          position: "sticky",
+          top: 0,
+          zIndex: 100,
+          background: "rgba(248,246,242,.97)",
+          backdropFilter: "blur(10px)",
+          WebkitBackdropFilter: "blur(10px)",
+          borderBottom: "1px solid var(--linen)",
         }}
       >
-        {/* Brand */}
-        <Link
-          href="/portal"
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "0.625rem",
-            color: "var(--ink)",
-            fontFamily: "var(--font-display)",
-            fontSize: "0.95rem",
-            textDecoration: "none",
-            flexShrink: 0,
-          }}
+        <div
+          className="flex items-center"
+          style={{ maxWidth: 1320, marginInline: "auto", padding: "0 clamp(1.25rem,4vw,2.5rem)", height: 62, gap: "1.5rem" }}
         >
-          <span className="brand-mark">M</span>
-          <span className="hidden sm:inline">Minded Connections</span>
-        </Link>
+          {/* Brand */}
+          <Link
+            href="/portal"
+            style={{ display: "inline-flex", alignItems: "center", gap: "0.625rem", color: "var(--ink)", fontFamily: "var(--font-display)", fontSize: "0.95rem", textDecoration: "none", flexShrink: 0 }}
+          >
+            <span className="brand-mark">M</span>
+            <span className="hidden sm:inline">Minded Connections</span>
+          </Link>
 
-        {/* Nav — desktop only */}
-        <nav className="hidden lg:flex items-center gap-0.5 flex-1" aria-label="Portal navigation">
+          {/* Desktop nav */}
+          <nav className="hidden lg:flex items-center gap-0.5 flex-1" aria-label="Portal navigation">
+            {NAV_ITEMS.map((item) => {
+              const isActive = activePage === item.id;
+              return (
+                <Link
+                  key={item.id}
+                  href={item.href}
+                  aria-current={isActive ? "page" : undefined}
+                  style={{
+                    display: "inline-flex", alignItems: "center", gap: "0.375rem",
+                    padding: "0.45rem 0.75rem", fontSize: "0.875rem",
+                    color: isActive ? "var(--sage-600)" : "var(--stone-700)",
+                    fontFamily: "var(--font-body)", textDecoration: "none", borderRadius: 6,
+                    background: isActive ? "var(--sage-50)" : "transparent",
+                    transition: "background 150ms, color 150ms",
+                  }}
+                >
+                  {item.icon}
+                  {item.label}
+                  {item.badge != null && (
+                    <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 17, height: 17, borderRadius: "50%", background: "var(--sage-500)", color: "white", fontSize: "0.6875rem", fontWeight: 600, fontFamily: "var(--font-body)", lineHeight: 1 }}>
+                      {item.badge}
+                    </span>
+                  )}
+                </Link>
+              );
+            })}
+          </nav>
+
+          {/* Right side */}
+          <div className="flex items-center gap-2 ml-auto">
+            {/* Notification bell */}
+            <button
+              aria-label="Notifications"
+              style={{ position: "relative", width: 38, height: 38, background: "none", border: "none", borderRadius: 6, display: "inline-flex", alignItems: "center", justifyContent: "center", color: "var(--stone-700)", cursor: "pointer" }}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+                <path d="M10 21a2 2 0 0 0 4 0" />
+              </svg>
+              <span style={{ position: "absolute", top: 7, right: 7, width: 7, height: 7, borderRadius: "50%", background: "var(--sage-500)", border: "2px solid var(--warm-white)" }} />
+            </button>
+
+            {/* Avatar pill — desktop only, uses same hide/show as site-header nav-cta */}
+            <button
+              onClick={handleSignOut}
+              title="Sign out"
+              className="hidden lg:inline-flex"
+              style={{ alignItems: "center", gap: "0.5rem", padding: "0.375rem 0.75rem 0.375rem 0.375rem", background: "none", border: "1.5px solid var(--linen)", borderRadius: 100, cursor: "pointer" }}
+            >
+              <span style={{ width: 28, height: 28, borderRadius: "50%", background: "var(--sage-100)", color: "var(--sage-700)", fontFamily: "var(--font-display)", fontSize: "0.875rem", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+                S
+              </span>
+              <span style={{ fontSize: "0.875rem", color: "var(--ink)", fontFamily: "var(--font-body)" }}>Sarah C.</span>
+            </button>
+
+            {/* Hamburger — mobile only, same class as site-header */}
+            <button
+              className="nav-hamburger"
+              aria-expanded={open}
+              aria-controls="portal-nav-drawer"
+              aria-label="Open navigation menu"
+              onClick={() => setOpen((v) => !v)}
+            >
+              <span /><span /><span />
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Overlay — same as site-header */}
+      {open && (
+        <div
+          className="drawer-overlay is-open"
+          onClick={() => setOpen(false)}
+        />
+      )}
+
+      {/* Drawer — same as site-header */}
+      <aside
+        className={`nav-drawer ${open ? "is-open" : ""}`}
+        id="portal-nav-drawer"
+        hidden={!open}
+        aria-label="Mobile navigation"
+      >
+        <div className="drawer-head">
+          <span className="drawer-brand">Minded Connections</span>
+          <button className="drawer-close" onClick={() => setOpen(false)} aria-label="Close menu">×</button>
+        </div>
+        <nav>
           {NAV_ITEMS.map((item) => {
             const isActive = activePage === item.id;
             return (
@@ -136,39 +218,12 @@ export function PortalHeader({ activePage }: PortalHeaderProps) {
                 key={item.id}
                 href={item.href}
                 aria-current={isActive ? "page" : undefined}
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "0.375rem",
-                  padding: "0.45rem 0.75rem",
-                  fontSize: "0.875rem",
-                  color: isActive ? "var(--sage-600)" : "var(--stone-700)",
-                  fontFamily: "var(--font-body)",
-                  textDecoration: "none",
-                  borderRadius: 6,
-                  background: isActive ? "var(--sage-50)" : "transparent",
-                  transition: "background 150ms, color 150ms",
-                }}
+                onClick={() => setOpen(false)}
+                style={{ color: isActive ? "var(--sage-500)" : undefined, fontWeight: isActive ? 500 : undefined }}
               >
-                {item.icon}
                 {item.label}
                 {item.badge != null && (
-                  <span
-                    style={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      width: 17,
-                      height: 17,
-                      borderRadius: "50%",
-                      background: "var(--sage-500)",
-                      color: "white",
-                      fontSize: "0.6875rem",
-                      fontWeight: 600,
-                      fontFamily: "var(--font-body)",
-                      lineHeight: 1,
-                    }}
-                  >
+                  <span style={{ marginLeft: "0.4rem", display: "inline-flex", alignItems: "center", justifyContent: "center", width: 17, height: 17, borderRadius: "50%", background: "var(--sage-500)", color: "white", fontSize: "0.6875rem", fontWeight: 600, lineHeight: 1 }}>
                     {item.badge}
                   </span>
                 )}
@@ -177,84 +232,20 @@ export function PortalHeader({ activePage }: PortalHeaderProps) {
           })}
         </nav>
 
-        {/* Actions — ml-auto keeps right-aligned on mobile when nav is hidden */}
-        <div className="flex items-center gap-2 ml-auto">
-          {/* Notification bell */}
+        {/* Profile at bottom */}
+        <div style={{ marginTop: "auto", borderTop: "1px solid var(--linen)", paddingTop: "1.25rem", display: "flex", alignItems: "center", gap: "0.75rem" }}>
+          <span style={{ width: 32, height: 32, borderRadius: "50%", background: "var(--sage-100)", color: "var(--sage-700)", fontFamily: "var(--font-display)", fontSize: "0.9rem", display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+            S
+          </span>
+          <span style={{ flex: 1, fontSize: "0.9rem", color: "var(--ink)", fontFamily: "var(--font-body)" }}>Sarah C.</span>
           <button
-            aria-label="Notifications"
-            style={{
-              position: "relative",
-              width: 38,
-              height: 38,
-              background: "none",
-              border: "none",
-              borderRadius: 6,
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              color: "var(--stone-700)",
-              cursor: "pointer",
-            }}
+            onClick={() => { setOpen(false); handleSignOut(); }}
+            style={{ fontSize: "0.8125rem", color: "var(--stone-500)", fontFamily: "var(--font-body)", background: "none", border: "none", cursor: "pointer", padding: 0 }}
           >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
-              <path d="M10 21a2 2 0 0 0 4 0" />
-            </svg>
-            {/* Green dot */}
-            <span
-              style={{
-                position: "absolute",
-                top: 7,
-                right: 7,
-                width: 7,
-                height: 7,
-                borderRadius: "50%",
-                background: "var(--sage-500)",
-                border: "2px solid var(--warm-white)",
-              }}
-            />
-          </button>
-
-          {/* Avatar pill */}
-          <button
-            onClick={handleSignOut}
-            title="Sign out"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "0.5rem",
-              padding: "0.375rem 0.75rem 0.375rem 0.375rem",
-              background: "none",
-              border: "1.5px solid var(--linen)",
-              borderRadius: 100,
-              cursor: "pointer",
-            }}
-          >
-            <span
-              style={{
-                width: 28,
-                height: 28,
-                borderRadius: "50%",
-                background: "var(--sage-100)",
-                color: "var(--sage-700)",
-                fontFamily: "var(--font-display)",
-                fontSize: "0.875rem",
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              S
-            </span>
-            <span
-              className="hidden sm:inline"
-              style={{ fontSize: "0.875rem", color: "var(--ink)", fontFamily: "var(--font-body)" }}
-            >
-              Sarah C.
-            </span>
+            Sign out
           </button>
         </div>
-      </div>
-    </header>
+      </aside>
+    </>
   );
 }
