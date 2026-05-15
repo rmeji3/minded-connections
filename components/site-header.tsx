@@ -30,7 +30,7 @@ export function SiteHeader() {
       <header id="site-header" data-state={state}>
         <nav className="container nav" aria-label="Main navigation">
           <Link href="#" className="nav-brand">
-            <Image src="/logo.svg" alt="" width={36} height={33} aria-hidden="true" />
+            <Image src="/logo.svg" alt="" width={48} height={44} aria-hidden="true" />
             <span className="brand-name">Minded Connections, <span className="brand-md">MD</span></span>
           </Link>
 

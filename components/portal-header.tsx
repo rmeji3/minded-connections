@@ -117,7 +117,7 @@ export function PortalHeader({ activePage }: PortalHeaderProps) {
             href="/portal"
             style={{ display: "inline-flex", alignItems: "center", gap: "0.625rem", color: "var(--ink)", fontFamily: "var(--font-display)", fontSize: "0.95rem", textDecoration: "none", flexShrink: 0 }}
           >
-            <Image src="/logo.svg" alt="Minded Connections" width={36} height={33} />
+            <Image src="/logo.svg" alt="Minded Connections" width={48} height={44} />
             <span>Minded Connections</span>
           </Link>
 
