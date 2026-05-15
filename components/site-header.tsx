@@ -1,5 +1,6 @@
 "use client";
 import * as React from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
@@ -29,7 +30,7 @@ export function SiteHeader() {
       <header id="site-header" data-state={state}>
         <nav className="container nav" aria-label="Main navigation">
           <Link href="#" className="nav-brand">
-            <span className="brand-mark" aria-hidden="true">M</span>
+            <Image src="/logo.svg" alt="" width={36} height={33} aria-hidden="true" />
             <span className="brand-name">Minded Connections, <span className="brand-md">MD</span></span>
           </Link>
 

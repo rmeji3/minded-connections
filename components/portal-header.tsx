@@ -1,5 +1,6 @@
 "use client";
 import * as React from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -116,8 +117,8 @@ export function PortalHeader({ activePage }: PortalHeaderProps) {
             href="/portal"
             style={{ display: "inline-flex", alignItems: "center", gap: "0.625rem", color: "var(--ink)", fontFamily: "var(--font-display)", fontSize: "0.95rem", textDecoration: "none", flexShrink: 0 }}
           >
-            <span className="brand-mark">M</span>
-            <span className="hidden sm:inline">Minded Connections</span>
+            <Image src="/logo.svg" alt="Minded Connections" width={36} height={33} />
+            <span>Minded Connections</span>
           </Link>
 
           {/* Desktop nav */}

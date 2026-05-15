@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
@@ -20,7 +21,7 @@ export default function LoginPage() {
         style={{ padding: "clamp(2rem,6vw,4rem)" }}
       >
         <a href="/" style={{ display: "inline-flex", alignItems: "center", gap: "0.75rem", textDecoration: "none" }}>
-          <span className="brand-mark" style={{ borderColor: "rgba(248,246,242,.4)", color: "var(--warm-white)" }}>M</span>
+          <Image src="/logo.svg" alt="" width={36} height={33} style={{ filter: "brightness(0) invert(1)" }} aria-hidden="true" />
           <span style={{ color: "var(--warm-white)", fontFamily: "var(--font-display)", fontSize: "1.05rem" }}>
             Minded Connections{" "}
             <em style={{ color: "var(--sage-300)", fontStyle: "italic" }}>— md</em>
@@ -64,7 +65,7 @@ export default function LoginPage() {
 
         {/* Mobile brand — hidden on desktop where the aside shows it */}
         <div className="flex lg:hidden items-center gap-3 px-6 py-4" style={{ borderBottom: "1px solid var(--linen)" }}>
-          <span className="brand-mark">M</span>
+          <Image src="/logo.svg" alt="" width={36} height={33} aria-hidden="true" />
           <span style={{ fontFamily: "var(--font-display)", color: "var(--ink)", fontSize: "1rem" }}>
             Minded Connections <em style={{ color: "var(--sage-500)" }}>— md</em>
           </span>
