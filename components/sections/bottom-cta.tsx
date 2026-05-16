@@ -10,7 +10,7 @@ export function BottomCta() {
           <p className="bottom-cta-sub">Let us take it from here — no referral needed, no long wait.</p>
           <div className="bottom-cta-actions">
             <a href="#book" className="btn-light">Book a Consultation</a>
-            <a href="tel:9095550142" className="btn-phone">Or call <span className="phone-num">(909) 555-0142</span></a>
+            <a href="tel:9513388653" className="btn-phone">Or call <span className="phone-num">(951) 338-8653</span></a>
           </div>
           <ul className="bottom-cta-points" role="list">
             <li><span className="check" aria-hidden="true">✓</span> No referral required</li>

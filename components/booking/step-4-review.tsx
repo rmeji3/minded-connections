@@ -104,7 +104,7 @@ export function Step4Review({ visitType, visitMode, selectedDate, selectedTime, 
           }
           label="MODE"
           value={visitMode === "telehealth" ? "Telehealth" : "In-person"}
-          sub={visitMode === "telehealth" ? "Secure video link · 15 min before start" : "Corona office · 123 W 6th St, Suite 210"}
+          sub={visitMode === "telehealth" ? "Secure video link · 15 min before start" : "Menifee office · Menifee, CA 92584"}
           onClick={() => onJumpToStep(1)}
           actionLabel="Edit"
         />

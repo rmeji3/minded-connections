@@ -19,7 +19,7 @@ export function Step3Notes({ notes, setNotes, onContinue }: Step3Props) {
         Anything we should <em style={{ fontStyle: "italic" }}>know</em>?
       </div>
       <p style={{ fontSize: "0.9rem", color: "var(--stone-600)", margin: "0 0 1.25rem", lineHeight: 1.6 }}>
-        A few words helps Dr. Hernandez prepare. Completely optional.
+        A few words helps Michelle prepare. Completely optional.
       </p>
 
       <label

@@ -28,7 +28,7 @@ const VISIT_MODES = [
   {
     id: "in-person" as VisitMode,
     label: "In-person",
-    sub: "Corona office · 123 W 6th St, Suite 210",
+    sub: "Menifee office · Menifee, CA 92584",
     iconBg: "var(--sage-500)",
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">

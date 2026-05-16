@@ -1,7 +1,7 @@
 import { Reveal } from "@/components/reveal";
 
 const tags = [
-  "Anxiety","Depression","Bipolar Disorder","ADHD","OCD","PTSD","Panic Disorder","Social Anxiety","Mood Disorders","Schizophrenia","Psychosis","Insomnia","Grief & Loss","Trauma","Substance Use","Personality Disorders","Burnout","Life Transitions",
+  "ADHD","Autism Spectrum Disorder","Asperger's Syndrome","Learning Disabilities","Dyslexia","Intellectual Disability","Developmental Disorders","Emotional Disturbance","Behavioral Issues","Coping Skills","Peer Relationships","School Issues","IEP & 504 Advocacy","Parent Psychoeducation","Cognitive & Neuropsychological Testing",
 ];
 
 export function Conditions() {
@@ -10,9 +10,9 @@ export function Conditions() {
       <div className="container container--narrow conditions-head">
         <Reveal>
           <p className="eyebrow">Areas of Care</p>
-          <h2>We treat a wide range of <em>psychiatric conditions.</em></h2>
+          <h2>Evaluations across a wide range of <em>learning & behavioral needs.</em></h2>
           <p className="lead">
-            Every person's presentation is unique. These are some of the most common areas we support — if you don't see your concern listed, reach out anyway.
+            Every person's profile is unique. These are the core areas we assess and support — if you don't see your concern listed, reach out anyway.
           </p>
         </Reveal>
       </div>

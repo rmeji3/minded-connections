@@ -1,30 +1,31 @@
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/reveal";
+import { OfficeGallery } from "@/components/sections/office-gallery";
 
 export function About() {
   return (
     <section id="about" className="section section--about">
       <div className="container grid-split about-grid">
         <Reveal className="about-text">
-          <p className="eyebrow">About Dr. Hernandez</p>
-          <h2>A psychiatrist who <em>listens first,</em> then acts.</h2>
+          <p className="eyebrow">About Michelle Hernandez</p>
+          <h2>An evaluator who <em>clarifies first,</em> then guides.</h2>
           <p className="lead">
-            With over 12 years in psychiatry, Dr. Michelle Hernandez brings both clinical rigor and genuine warmth to every appointment.
+            With 7 years of practice, Michelle Hernandez, LEP, Ed.S. brings both clinical rigor and genuine compassion to every evaluation.
           </p>
           <p>
-            Mental health care works best when the relationship between patient and provider is built on trust, time, and honest communication. Dr. Hernandez founded Minded Connections to offer a practice that moves at the right pace: thorough evaluations, collaborative treatment plans, and real availability between sessions.
+            Families, students, and adults come to MindEd Connections seeking clarity — exploring autism, ADHD, learning disabilities, or emotional and behavioral concerns, or navigating 504 plans, IEPs, and school services. Michelle founded MindEd Connections to offer support that feels thorough, compassionate, and truly personalized.
           </p>
           <p>
-            Whether you're navigating anxiety, a mood disorder, a difficult life transition, or something harder to name, Dr. Hernandez works alongside you to build understanding and lasting skills — not just symptom management.
+            Whether you're seeking answers, guidance, or a partner in navigating the school system, Michelle walks with you every step of the way — helping you move forward with direction, skills, and confidence.
           </p>
 
           <div className="credentials">
             <p className="credentials-eyebrow">Education &amp; Credentials</p>
             <ul>
-              <li><span>Fellowship,</span> Psychiatry — Harvard Medical School / Massachusetts General Hospital</li>
-              <li><span>Residency,</span> General Psychiatry — Massachusetts General Hospital</li>
-              <li><span>Board Certified,</span> American Board of Psychiatry &amp; Neurology</li>
-              <li><span>Member,</span> American Psychiatric Association (APA)</li>
+              <li><span>Ed.S.,</span> Educational Psychology / PPS Credential — California State University San Bernardino, 2019</li>
+              <li><span>Certificate,</span> Board Certified Behavior Analyst — California State University San Marcos, 2024</li>
+              <li><span>Licensed,</span> Educational Psychologist — State of California, LEP4734</li>
+              <li><span>Licensed,</span> Board of Behavioral Sciences</li>
             </ul>
           </div>
 
@@ -32,11 +33,7 @@ export function About() {
         </Reveal>
 
         <Reveal className="about-photo">
-          <div className="about-photo-offset" aria-hidden="true" />
-          <div className="placeholder-photo placeholder-photo--portrait">
-            <span className="ph-label">PORTRAIT</span>
-            <span className="ph-detail">natural light · no white coat · 4:5</span>
-          </div>
+          <OfficeGallery />
         </Reveal>
       </div>
     </section>

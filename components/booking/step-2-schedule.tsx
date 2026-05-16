@@ -63,7 +63,7 @@ export function Step2Schedule({
           Pick a <em style={{ fontStyle: "italic" }}>date &amp; time</em>
         </div>
         <p style={{ fontSize: "0.875rem", color: "var(--stone-600)", margin: "0 0 1.25rem", lineHeight: 1.6 }}>
-          Available slots for Dr. Hernandez · your local time zone.
+          Available slots for Michelle Hernandez · your local time zone.
         </p>
 
         {/* ── Calendar ── */}

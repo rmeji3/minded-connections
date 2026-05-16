@@ -2,33 +2,33 @@ import { Reveal } from "@/components/reveal";
 
 const services = [
   {
-    title: "Psychiatric Evaluation",
-    body: "A comprehensive, 90-minute assessment covering personal history, behavioral patterns, current functioning, and treatment goals — so the full picture comes first.",
+    title: "Psychological Evaluations",
+    body: "Comprehensive assessments covering cognitive ability, academic achievement, processing, and behavioral functioning — so the full picture comes first.",
     icon: <svg viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="currentColor" strokeWidth="1.2"><path d="M6 8h20M6 14h20M6 20h14M6 26h10" /><circle cx="26" cy="22" r="3" /></svg>,
   },
   {
-    title: "Medication Management",
-    body: "When medication is part of the plan, Dr. Hernandez prescribes conservatively, monitors closely, and always explains the reasoning in plain language you can trust.",
+    title: "ADHD & Autism Assessments",
+    body: "Thorough diagnostic evaluations for ADHD, autism spectrum disorder, Asperger's, and related developmental concerns — with clear, actionable findings.",
     icon: <svg viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="currentColor" strokeWidth="1.2"><rect x="6" y="10" width="20" height="14" rx="3" /><path d="M16 4v6M11 4v6M21 4v6M11 17h10" /></svg>,
   },
   {
-    title: "Individual Therapy",
-    body: "Weekly or biweekly sessions drawing on CBT, DBT, and mindfulness-based approaches — tailored to your temperament, history, and goals.",
+    title: "Learning Disability Testing",
+    body: "Identifying dyslexia, dyscalculia, processing disorders, and other learning differences so students get the right support at school and beyond.",
     icon: <svg viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="currentColor" strokeWidth="1.2"><path d="M16 28s-10-6-10-14a6 6 0 0 1 10-4 6 6 0 0 1 10 4c0 8-10 14-10 14z" /></svg>,
   },
   {
-    title: "Ongoing Care",
-    body: "Regular follow-up appointments to monitor progress, adjust treatment, and stay aligned with your goals as your life and needs evolve.",
+    title: "IEP & 504 Advocacy",
+    body: "Guidance and advocacy to help families navigate school systems, understand evaluation results, and secure the services and accommodations students deserve.",
     icon: <svg viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="currentColor" strokeWidth="1.2"><rect x="4" y="7" width="24" height="16" rx="2" /><path d="M12 27h8M16 23v4" /></svg>,
   },
   {
-    title: "Telehealth",
-    body: "Secure video appointments from wherever you are — same quality of care, without the commute. Available to patients throughout California.",
+    title: "Behavioral Health Services",
+    body: "Behavioral consultation and parent psychoeducation to address emotional disturbance, coping skills, peer relationships, and school behavior.",
     icon: <svg viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="currentColor" strokeWidth="1.2"><path d="M4 26V8h24v18" /><path d="M4 26h24M11 14h10M11 20h6" /></svg>,
   },
   {
-    title: "Second Opinions",
-    body: "Unsure about a diagnosis or treatment plan? Dr. Hernandez offers thoughtful, independent evaluations for patients seeking clarity.",
+    title: "Telehealth & Consultation",
+    body: "Available in-person and online throughout California. Evaluations and assessments are offered weekdays, weekends, mornings, afternoons, and evenings.",
     icon: <svg viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="currentColor" strokeWidth="1.2"><circle cx="16" cy="16" r="11"/><path d="M16 10v6l4 2"/></svg>,
   },
 ];
@@ -40,7 +40,7 @@ export function Services() {
         <Reveal className="section-head">
           <p className="eyebrow">What We Offer</p>
           <h2>Care that meets you <em>where you are.</em></h2>
-          <p className="lead">Every service is designed around you as a whole person — not just a diagnosis or a checklist.</p>
+          <p className="lead">Every evaluation is thorough, compassionate, and personalized — designed to provide clarity and open doors, not just check boxes.</p>
         </Reveal>
 
         <ul className="services-grid" role="list">

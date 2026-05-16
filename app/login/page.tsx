@@ -21,11 +21,7 @@ export default function LoginPage() {
         style={{ padding: "clamp(2rem,6vw,4rem)" }}
       >
         <a href="/" style={{ display: "inline-flex", alignItems: "center", gap: "0.75rem", textDecoration: "none" }}>
-          <Image src="/logo.svg" alt="" width={48} height={44} aria-hidden="true" />
-          <span style={{ color: "var(--warm-white)", fontFamily: "var(--font-display)", fontSize: "1.05rem" }}>
-            Minded Connections{" "}
-            <em style={{ color: "var(--sage-300)", fontStyle: "italic" }}>— md</em>
-          </span>
+          <Image src="/logo.svg" alt="MindEd Connections" width={140} height={51} style={{ filter: "brightness(0) invert(1)" }} />
         </a>
 
         <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", paddingBlock: "3rem" }}>
@@ -34,8 +30,8 @@ export default function LoginPage() {
             Continue your <em>care,<br />securely</em>.
           </h1>
           <p style={{ color: "rgba(228,235,226,.85)", fontSize: "1.0625rem", maxWidth: "38ch", margin: 0, lineHeight: 1.75 }}>
-            Message Dr. Hernandez, review medications, request refills, and join your
-            telehealth visits — all in one private space.
+            Message Michelle Hernandez, review your evaluation reports, complete check-ins, and join your
+            telehealth appointments — all in one private space.
           </p>
         </div>
 
@@ -65,10 +61,7 @@ export default function LoginPage() {
 
         {/* Mobile brand — hidden on desktop where the aside shows it */}
         <div className="flex lg:hidden items-center gap-3 px-6 py-4" style={{ borderBottom: "1px solid var(--linen)" }}>
-          <Image src="/logo.svg" alt="" width={48} height={44} aria-hidden="true" />
-          <span style={{ fontFamily: "var(--font-display)", color: "var(--ink)", fontSize: "1rem" }}>
-            Minded Connections <em style={{ color: "var(--sage-500)" }}>— md</em>
-          </span>
+          <Image src="/logo.svg" alt="MindEd Connections" width={140} height={51} />
         </div>
 
         {/* Top bar */}
@@ -147,8 +140,8 @@ export default function LoginPage() {
 
             <p style={{ marginTop: "1.75rem", fontSize: "0.8125rem", color: "var(--stone-500)", lineHeight: 1.7, maxWidth: "none", marginBottom: 0 }}>
               Trouble accessing your account? Email{" "}
-              <a href="mailto:support@mindedconnections.com" style={{ color: "var(--sage-500)" }}>support@mindedconnections.com</a>
-              {" "}or call <span style={{ fontFamily: "var(--font-detail)" }}>(951) 555-0102</span>.
+              <a href="mailto:hello@mindedconnections.com" style={{ color: "var(--sage-500)" }}>hello@mindedconnections.com</a>
+              {" "}or call <span style={{ fontFamily: "var(--font-detail)" }}>(951) 338-8653</span>.
             </p>
           </div>
         </div>
@@ -158,7 +151,7 @@ export default function LoginPage() {
           className="flex flex-wrap justify-between items-center gap-2 px-6 sm:px-10 py-4"
           style={{ fontSize: "0.8125rem", color: "var(--stone-500)", borderTop: "1px solid var(--linen)" }}
         >
-          <span>© 2026 Minded Connections, Inc. · CA PMC #00000</span>
+          <span>© 2026 MindEd Connections · Michelle Hernandez, LEP4734</span>
           <span>
             <a href="#" style={{ color: "var(--stone-500)" }}>Privacy</a>&nbsp;·&nbsp;
             <a href="#" style={{ color: "var(--stone-500)" }}>Terms</a>&nbsp;·&nbsp;

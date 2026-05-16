@@ -79,9 +79,9 @@ export default function PortalPage() {
               </CardHead>
               <div style={{ display: "flex", flexDirection: "column" }}>
                 {[
-                  { avatar: "M", staff: false, from: "Dr. Michelle Hernandez", subj: "Following up on your sleep notes", snippet: "Thanks for sending the journal — let's plan to taper the evening dose by 5mg starting Monday and revisit at our visit Tuesday.", time: "9:42 am", unread: true },
-                  { avatar: "R", staff: true, from: "Rae, Patient Coordinator", subj: "Your June refill is ready to pickup", snippet: "Walgreens on Magnolia confirmed they'll have it after 4pm today. Reply here if you'd prefer mail delivery next cycle.", time: "Yesterday", unread: true },
-                  { avatar: "M", staff: false, from: "Dr. Michelle Hernandez", subj: "Visit summary from Apr 30", snippet: "Attached your visit summary and updated care plan. Keep an eye on energy in the afternoons — we'll discuss at our next session.", time: "May 1", unread: false },
+                  { avatar: "M", staff: false, from: "Michelle Hernandez, LEP, Ed.S.", subj: "Following up on your evaluation notes", snippet: "Thanks for sending those school records — let's plan to review findings together at our session Tuesday and go over next steps.", time: "9:42 am", unread: true },
+                  { avatar: "R", staff: true, from: "Rae, Client Coordinator", subj: "Your evaluation report is ready", snippet: "Your report has been uploaded to the portal. Reply here if you'd like to schedule a feedback session to review the findings.", time: "Yesterday", unread: true },
+                  { avatar: "M", staff: false, from: "Michelle Hernandez, LEP, Ed.S.", subj: "Session summary from Apr 30", snippet: "Attached your session summary and recommendations. Keep notes on the strategies we discussed — we'll revisit at our next appointment.", time: "May 1", unread: false },
                 ].map((msg, i) => (
                   <article key={i} style={{ display: "flex", gap: "0.875rem", padding: "0.875rem 0", borderBottom: i < 2 ? "1px solid var(--linen)" : "none", cursor: "pointer" }}>
                     <div style={{ width: 38, height: 38, borderRadius: "50%", background: msg.staff ? "var(--linen)" : "var(--sage-100)", color: msg.staff ? "var(--stone-700)" : "var(--sage-700)", display: "inline-flex", alignItems: "center", justifyContent: "center", fontFamily: "var(--font-display)", fontSize: "0.95rem", flexShrink: 0 }}>{msg.avatar}</div>
@@ -182,7 +182,7 @@ export default function PortalPage() {
                 Tue, May 19 · <em>2:30 pm</em>
               </div>
               <div style={{ fontSize: "0.875rem", color: "var(--sage-200)", marginBottom: "1.25rem" }}>
-                Medication follow-up · 30 min · Telehealth with Dr. Hernandez
+                Evaluation follow-up · 30 min · Telehealth with Michelle Hernandez
               </div>
               <div className="flex flex-wrap gap-3">
                 <a href="#" className="btn-primary" style={{ background: "var(--warm-white)", color: "var(--sage-700)", border: "2px solid transparent", minHeight: 40, padding: "0.55rem 1.25rem", fontSize: "0.8125rem" }}>Join visit</a>
@@ -223,7 +223,7 @@ export default function PortalPage() {
               </CardHead>
               <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
                 {[
-                  { initials: "MH", name: "Michelle Hernandez, MD", role: "Psychiatrist · primary" },
+                  { initials: "MH", name: "Michelle Hernandez, LEP, Ed.S.", role: "Licensed Educational Psychologist · primary" },
                   { initials: "JL", name: "Jules Liu, LMFT", role: "Therapist · weekly check-ins" },
                   { initials: "R", name: "Rae Okafor", role: "Patient coordinator · scheduling & billing" },
                 ].map((m) => (

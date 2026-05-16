@@ -117,8 +117,7 @@ export function PortalHeader({ activePage }: PortalHeaderProps) {
             href="/portal"
             style={{ display: "inline-flex", alignItems: "center", gap: "0.625rem", color: "var(--ink)", fontFamily: "var(--font-display)", fontSize: "0.95rem", textDecoration: "none", flexShrink: 0 }}
           >
-            <Image src="/logo.svg" alt="Minded Connections" width={48} height={44} />
-            <span>Minded Connections</span>
+            <Image src="/logo.svg" alt="MindEd Connections" width={110} height={40} />
           </Link>
 
           {/* Desktop nav */}
@@ -208,7 +207,7 @@ export function PortalHeader({ activePage }: PortalHeaderProps) {
         aria-label="Mobile navigation"
       >
         <div className="drawer-head">
-          <span className="drawer-brand">Minded Connections</span>
+          <span className="drawer-brand">MindEd Connections</span>
           <button className="drawer-close" onClick={() => setOpen(false)} aria-label="Close menu">×</button>
         </div>
         <nav>

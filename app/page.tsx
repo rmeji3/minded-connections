@@ -6,7 +6,6 @@ import { Services } from "@/components/sections/services";
 import { Process } from "@/components/sections/process";
 import { Conditions } from "@/components/sections/conditions";
 import { MidCta } from "@/components/sections/mid-cta";
-import { Testimonials } from "@/components/sections/testimonials";
 import { Faq } from "@/components/sections/faq";
 import { BookForm } from "@/components/sections/book-form";
 import { BottomCta } from "@/components/sections/bottom-cta";
@@ -24,7 +23,6 @@ export default function Home() {
         <Process />
         <Conditions />
         <MidCta />
-        <Testimonials />
         <Faq />
         <BookForm />
         <BottomCta />

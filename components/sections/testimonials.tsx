@@ -1,9 +1,9 @@
 import { Reveal } from "@/components/reveal";
 
 const quotes = [
-  { q: "Dr. Hernandez took the time to truly understand what I was going through before offering any recommendations. That unhurried, thoughtful approach made all the difference.", c: "Patient, Corona CA" },
-  { q: "I'd seen two other providers before Minded Connections. This was the first place where I actually wanted to come back.", c: "Patient, Riverside CA" },
-  { q: "The sessions changed how I understand myself. I didn't expect that — and honestly, it's been the biggest shift of all.", c: "Patient, Corona CA" },
+  { q: "Michelle took the time to truly understand what our son was going through before offering any recommendations. That unhurried, thoughtful approach made all the difference.", c: "Parent, Menifee CA" },
+  { q: "We'd been to two other evaluators before MindEd Connections. This was the first place where we actually felt heard and left with real answers.", c: "Parent, Riverside CA" },
+  { q: "The evaluation changed how I understand myself. I didn't expect that — and honestly, it's been the biggest shift of all.", c: "Adult client, Perris CA" },
 ];
 
 export function Testimonials() {

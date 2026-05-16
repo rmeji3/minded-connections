@@ -6,12 +6,12 @@ export function Hero() {
     <section id="hero" aria-labelledby="hero-heading">
       <div className="hero-text-panel">
         <div className="hero-inner">
-          <p className="hero-credential">Board-Certified Psychiatrist</p>
+          <p className="hero-credential">Licensed Educational Psychologist · LEP, Ed.S.</p>
           <h1 id="hero-heading">
-            Mental health care that meets you <em>where you are.</em>
+            Clarity for every learner, at every <em>stage of life.</em>
           </h1>
           <p className="lead hero-lead">
-            Minded Connections offers evidence-based psychiatric care in a warm, unhurried practice built around your needs — not a waiting list.
+            MindEd Connections provides comprehensive psychological and educational evaluations — helping children, teens, and adults understand their strengths and move forward with confidence.
           </p>
           <div className="hero-cta-row">
             <Button asChild><a href="#book">Book a Consultation</a></Button>
@@ -27,7 +27,7 @@ export function Hero() {
       <div className="hero-image" role="img" aria-label="A bright, plant-filled reading and seating area with bookshelves and natural light">
         <Image
           className="hero-image-photo"
-          src="/office.png"
+          src="/office_3.jpeg"
           alt=""
           fill
           priority

@@ -68,7 +68,7 @@ export default function AppointmentsPage() {
               { eyebrow: "NEXT VISIT",       value: <>Tue, <em style={{ fontStyle: "italic", color: "var(--sage-500)" }}>May 19</em></>,  sub: "In 5 days · 2:30 pm" },
               { eyebrow: "VISITS THIS YEAR", value: <>14</>,  sub: "+ 2 since April" },
               { eyebrow: "ATTENDANCE",       value: <>96%</>, sub: "1 reschedule, 0 no-shows" },
-              { eyebrow: "TELEHEALTH RATIO", value: <>11 / 14</>, sub: "3 in-person at Corona office" },
+              { eyebrow: "TELEHEALTH RATIO", value: <>11 / 14</>, sub: "3 in-person at Menifee office" },
             ].map((stat, i) => (
               <div key={i} style={{ background: "white", border: "1px solid var(--linen)", borderRadius: 10, padding: "1rem" }}>
                 <div style={{ fontSize: "0.6875rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--stone-500)", fontFamily: "var(--font-body)", fontWeight: 500, marginBottom: "0.5rem" }}>
