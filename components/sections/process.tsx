@@ -1,10 +1,10 @@
 import { Reveal } from "@/components/reveal";
 
 const steps = [
-  { n: "01", title: "Submit an Inquiry", body: "Fill out a brief form with your name and the main concern. We read every submission personally — no automated filtering." },
-  { n: "02", title: "Intake Call", body: "Within one business day, our care coordinator calls to learn more about you, answer your questions, and schedule your first appointment." },
-  { n: "03", title: "Evaluation Appointment", body: "A thorough, unhurried evaluation with Michelle. You are seen. You are heard. A written report with clear findings and recommendations follows." },
-  { n: "04", title: "Ongoing Support", body: "Follow-up consultation, school advocacy, parent psychoeducation, or behavioral services — continuously tailored to your evolving needs." },
+  { n: "01", title: "Submit an Inquiry", body: "Fill out the form below with your name and what you're looking for. We'll get back to you personally." },
+  { n: "02", title: "Free 15-Minute Consultation", body: "We'll call to learn more, answer your questions, and schedule your evaluation appointment." },
+  { n: "03", title: "Evaluation", body: "A thorough evaluation with Michelle. A written report with findings and recommendations follows." },
+  { n: "04", title: "Ongoing Support", body: "Follow-up consultation, school advocacy, parent psychoeducation, or behavioral services as needed." },
 ];
 
 export function Process() {
@@ -13,8 +13,8 @@ export function Process() {
       <div className="container">
         <Reveal className="section-head">
           <p className="eyebrow">How It Works</p>
-          <h2>From first call to <em>lasting change.</em></h2>
-          <p className="lead">We keep our intake process simple and human — no long waits, no impersonal portals.</p>
+          <h2>How it <em>works.</em></h2>
+          <p className="lead">Call or email us for a free 15-minute consultation. No referral needed.</p>
         </Reveal>
 
         <ol className="process-steps">

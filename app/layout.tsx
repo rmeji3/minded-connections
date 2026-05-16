@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "MindEd Connections — Psychological Evaluations in Menifee, CA",
+  title: "MindEd Connections | Psychological Evaluations in Menifee, CA",
   description: "Comprehensive psychological and educational evaluations for children, teens, and adults. Michelle Hernandez, LEP, Ed.S. specializes in ADHD, autism, learning disabilities, and IEP/504 advocacy in Menifee, CA, with telehealth available throughout California.",
 };
 

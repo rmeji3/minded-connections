@@ -12,7 +12,7 @@ export function Conditions() {
           <p className="eyebrow">Areas of Care</p>
           <h2>Evaluations across a wide range of <em>learning & behavioral needs.</em></h2>
           <p className="lead">
-            Every person's profile is unique. These are the core areas we assess and support — if you don't see your concern listed, reach out anyway.
+            Every person's profile is unique. These are the core areas we assess and support. If you don't see your concern listed, reach out anyway.
           </p>
         </Reveal>
       </div>

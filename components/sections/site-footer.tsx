@@ -43,7 +43,7 @@ export function SiteFooter() {
       <div className="container footer-legal">
         <p>© 2026 MindEd Connections · Michelle Hernandez, LEP, Ed.S. · LEP4734 · <a href="#">Privacy Policy</a> · <a href="#">HIPAA Notice</a> · <a href="#">Accessibility</a></p>
         <p className="crisis-line">
-          If you or someone you know is in crisis, call or text <a href="tel:988"><strong>988</strong></a> (Suicide &amp; Crisis Lifeline) — available 24/7.
+          If you or someone you know is in crisis, call or text <a href="tel:988"><strong>988</strong></a> (Suicide &amp; Crisis Lifeline), available 24/7.
         </p>
       </div>
     </footer>

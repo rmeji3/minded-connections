@@ -33,7 +33,7 @@ export function Step3Notes({ notes, setNotes, onContinue }: Step3Props) {
         rows={5}
         value={notes}
         onChange={(e) => setNotes(e.target.value)}
-        placeholder="e.g. Sleep has been better since the dose change, but afternoon energy is still low — want to revisit timing."
+        placeholder="e.g. Sleep has been better but afternoon energy is still low. Want to revisit timing."
         style={{
           width: "100%", fontFamily: "var(--font-body)", fontSize: "0.9375rem",
           color: "var(--ink)", background: "var(--warm-white)", border: "1.5px solid var(--linen)",

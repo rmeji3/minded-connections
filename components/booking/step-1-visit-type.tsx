@@ -54,7 +54,7 @@ export function Step1VisitType({ visitType, setVisitType, visitMode, setVisitMod
           What kind of <em style={{ fontStyle: "italic" }}>visit</em>?
         </div>
         <p style={{ fontSize: "0.9rem", color: "var(--stone-600)", margin: "0 0 1.25rem", lineHeight: 1.6 }}>
-          Choose the option that best matches what you&apos;d like to discuss. Not sure? Pick &ldquo;Med follow-up&rdquo; — we can adjust on the call.
+          Choose the option that best matches what you&apos;d like to discuss. Not sure? Pick any option and we can adjust on the call.
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

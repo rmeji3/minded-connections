@@ -3,7 +3,7 @@ import * as React from "react";
 import Image from "next/image";
 
 const IMAGES = [
-  { src: "/office_1.jpeg", alt: "MindEd Connections office — welcoming desk and seating area" },
+  { src: "/office_1.jpeg", alt: "MindEd Connections office, welcoming desk and seating area" },
   { src: "/office_2.jpeg", alt: "Comfortable seating area for consultations" },
   { src: "/office_3.jpeg", alt: "Full office view with desk and evaluation area" },
 ];

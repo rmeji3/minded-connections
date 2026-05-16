@@ -52,7 +52,7 @@ export default function AppointmentsPage() {
                 Your <em style={{ fontStyle: "italic", color: "var(--sage-500)" }}>visits</em>.
               </div>
               <p style={{ fontSize: "1rem", color: "var(--stone-700)", margin: 0, maxWidth: "54ch", lineHeight: 1.7 }}>
-                Everything on the calendar — upcoming visits, past sessions, and the things you&apos;ve cancelled. Need a new time? Pick one from open slots.
+                Upcoming visits, past sessions, and cancelled appointments. Need a new time? Pick one from open slots.
               </p>
             </div>
             <div className="sm:flex-shrink-0 w-full sm:w-auto">

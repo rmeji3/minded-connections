@@ -8,24 +8,24 @@ export function About() {
       <div className="container grid-split about-grid">
         <Reveal className="about-text">
           <p className="eyebrow">About Michelle Hernandez</p>
-          <h2>An evaluator who <em>clarifies first,</em> then guides.</h2>
+          <h2>Michelle Hernandez, <em>LEP, Ed.S.</em></h2>
           <p className="lead">
-            With 7 years of practice, Michelle Hernandez, LEP, Ed.S. brings both clinical rigor and genuine compassion to every evaluation.
+            I support children, teens, and adults facing learning, behavioral, or developmental challenges.
           </p>
           <p>
-            Families, students, and adults come to MindEd Connections seeking clarity — exploring autism, ADHD, learning disabilities, or emotional and behavioral concerns, or navigating 504 plans, IEPs, and school services. Michelle founded MindEd Connections to offer support that feels thorough, compassionate, and truly personalized.
+            Families, students, and adults come to us seeking clarity in their learning or behavioral health journey. Many are exploring autism, ADHD, learning disabilities, or emotional and behavioral concerns, or need support with 504 plans, IEPs, and school services.
           </p>
           <p>
-            Whether you're seeking answers, guidance, or a partner in navigating the school system, Michelle walks with you every step of the way — helping you move forward with direction, skills, and confidence.
+            You deserve support that feels thorough, compassionate, and truly personalized. Whether you're seeking answers, guidance, or a partner in navigating the school system, we're here to walk with you every step of the way.
           </p>
 
           <div className="credentials">
             <p className="credentials-eyebrow">Education &amp; Credentials</p>
             <ul>
-              <li><span>Ed.S.,</span> Educational Psychology / PPS Credential — California State University San Bernardino, 2019</li>
-              <li><span>Certificate,</span> Board Certified Behavior Analyst — California State University San Marcos, 2024</li>
-              <li><span>Licensed,</span> Educational Psychologist — State of California, LEP4734</li>
-              <li><span>Licensed,</span> Board of Behavioral Sciences</li>
+              <li><span>Ed.S.</span> Educational Psychology, PPS Credential, Cal State San Bernardino, 2019</li>
+              <li><span>Certificate</span> of Advanced Study, Board Certified Behavior Analyst, Cal State San Marcos, 2024</li>
+              <li><span>Licensed</span> Educational Psychologist, State of California, LEP4734</li>
+              <li><span>Licensed,</span> Board of Behavioral Sciences, LEP4734 / 2025</li>
             </ul>
           </div>
 

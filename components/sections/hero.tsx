@@ -8,14 +8,14 @@ export function Hero() {
         <div className="hero-inner">
           <p className="hero-credential">Licensed Educational Psychologist · LEP, Ed.S.</p>
           <h1 id="hero-heading">
-            Clarity for every learner, at every <em>stage of life.</em>
+            Every child, teen, and adult deserves to understand their <em>strengths.</em>
           </h1>
           <p className="lead hero-lead">
-            MindEd Connections provides comprehensive psychological and educational evaluations — helping children, teens, and adults understand their strengths and move forward with confidence.
+            We provide thorough evaluations, consultation, and advocacy to help families, students, and adults move forward with confidence.
           </p>
           <div className="hero-cta-row">
-            <Button asChild><a href="#book">Book a Consultation</a></Button>
-            <a href="#about" className="btn-text">Learn how we can help <span aria-hidden="true">→</span></a>
+            <Button asChild><a href="#book">Book a Free Consultation</a></Button>
+            <a href="tel:9513388653" className="btn-text">(951) 338-8653</a>
           </div>
           <div className="hero-trust">
             <span className="hero-trust-dot" aria-hidden="true" />

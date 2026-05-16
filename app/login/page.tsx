@@ -31,7 +31,7 @@ export default function LoginPage() {
           </h1>
           <p style={{ color: "rgba(228,235,226,.85)", fontSize: "1.0625rem", maxWidth: "38ch", margin: 0, lineHeight: 1.75 }}>
             Message Michelle Hernandez, review your evaluation reports, complete check-ins, and join your
-            telehealth appointments — all in one private space.
+            telehealth appointments, all in one private space.
           </p>
         </div>
 

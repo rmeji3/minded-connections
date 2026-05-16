@@ -45,7 +45,7 @@ export function BookingWizard({
     <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
       <DialogContent>
         <DialogTitle className="sr-only">Book a visit</DialogTitle>
-        <DialogDescription className="sr-only">Booking wizard — select a visit type, date, time, and confirm your appointment.</DialogDescription>
+        <DialogDescription className="sr-only">Select a visit type, date, time, and confirm your appointment.</DialogDescription>
         {/* Relative wrapper — gives the floating close btn its positioning anchor */}
         <div style={{ position: "relative" }}>
 

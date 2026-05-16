@@ -13,7 +13,7 @@ export function BookForm() {
       setStatus({ kind: "error", msg: "Please complete the required fields." });
       return;
     }
-    setStatus({ kind: "success", msg: "Thank you — we'll be in touch within one business day." });
+    setStatus({ kind: "success", msg: "Thank you. We'll be in touch within one business day." });
     (e.currentTarget as HTMLFormElement).reset();
   };
 
@@ -24,7 +24,7 @@ export function BookForm() {
           <p className="eyebrow">Request a Consultation</p>
           <h2 id="book-heading">Let's find the right <em>path forward.</em></h2>
           <p className="lead">
-            Fill out the form and we'll be in touch within one business day. There's no obligation — just a conversation.
+            Fill out the form and we'll be in touch within one business day. No obligation, just a conversation.
           </p>
           <div className="privacy-well">
             <p>All information is kept strictly confidential in accordance with HIPAA. See our <a href="#">Privacy Policy</a> for details. We will never share your information without your written consent.</p>
@@ -69,7 +69,7 @@ export function BookForm() {
 
             <div className="form-field">
               <label htmlFor="f-note">What brings you in?</label>
-              <textarea id="f-note" name="note" rows={4} placeholder="No pressure to have the right words — just share what's on your mind." />
+              <textarea id="f-note" name="note" rows={4} placeholder="Share what brings you in. No pressure to have the right words." />
             </div>
 
             <fieldset className="form-field form-radio">
