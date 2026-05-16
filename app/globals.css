@@ -171,18 +171,6 @@ p:last-child{margin-bottom:0}
 .office-gallery-main,.office-gallery-thumb{position:relative;cursor:pointer;background:none;border:none;padding:0;text-align:left}
 .office-gallery-main:hover .gallery-zoom-hint,.office-gallery-thumb:hover .gallery-zoom-hint{opacity:1}
 .gallery-zoom-hint{position:absolute;top:0.5rem;right:0.5rem;width:28px;height:28px;border-radius:4px;background:rgba(0,0,0,.45);color:#fff;font-size:1rem;display:inline-flex;align-items:center;justify-content:center;opacity:0;transition:opacity 150ms;pointer-events:none;z-index:2}
-.lightbox-overlay{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center}
-.lightbox-img-wrap{position:relative;width:min(90vw,900px);height:min(80vh,700px)}
-.lightbox-img{object-fit:contain}
-.lightbox-close{position:absolute;top:1rem;right:1rem;background:none;border:none;color:#fff;font-size:2.5rem;line-height:1;cursor:pointer;z-index:10;width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;border-radius:4px;opacity:.75;transition:opacity 150ms}
-.lightbox-close:hover{opacity:1}
-.lightbox-nav{position:absolute;top:50%;transform:translateY(-50%);background:none;border:none;color:#fff;font-size:3rem;line-height:1;cursor:pointer;padding:0.5rem 1rem;opacity:.6;transition:opacity 150ms;z-index:10}
-.lightbox-nav:hover{opacity:1}
-.lightbox-nav--prev{left:0.5rem}
-.lightbox-nav--next{right:0.5rem}
-.lightbox-dots{position:absolute;bottom:1.25rem;left:50%;transform:translateX(-50%);display:flex;gap:0.5rem;z-index:10}
-.lightbox-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.4);border:none;cursor:pointer;padding:0;transition:background 150ms}
-.lightbox-dot.is-active{background:#fff}
 
 .services-grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-6)}
 .service-card{background:var(--warm-white);border:1px solid var(--linen);border-top:3px solid var(--sage-300);border-radius:10px;padding:var(--sp-8);display:flex;flex-direction:column;gap:var(--sp-4);transition:box-shadow 250ms,transform 250ms}
