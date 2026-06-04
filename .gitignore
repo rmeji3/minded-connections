@@ -1,7 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
+node_modules/
 /.pnp
 .pnp.*
 .yarn/*
@@ -11,8 +11,23 @@
 !.yarn/versions
 
 # testing
-/coverage
+coverage/
+
+# ASP.NET build output
+**/bin/
+**/obj/
+
+# Serilog rolling logs
+**/logs/
+
+# ASP.NET dev secrets
 appsettings.Development.json
+
+# Rider / Visual Studio
+.idea/
+*.suo
+*.user
+.vs/
 
 # next.js
 .next/

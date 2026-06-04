@@ -1,0 +1,54 @@
+---
+description: Project coding standards for MindEd Connections — applies to all files
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# MindEd Connections — Coding Standards
+
+> The full standards document is `STANDARDS.md` at the repo root. This file is the enforced summary for Cursor.
+
+---
+
+## Frontend (Next.js)
+
+- Named exports only — default exports only in `page.tsx` files.
+- `"use client"` only when state, effects, or browser APIs are needed. Keep client components small.
+- Tailwind first for all styling. Use CSS design tokens (`var(--sage-500)`, `var(--linen)`, `var(--ink)`, etc.) — never raw hex values or hard-coded px sizes.
+- All imports use the `@/` alias. Import order: React/Next → third-party → components → lib → types.
+- `import * as React from "react"` — never the default import.
+- No form libraries — native `<form>` with local state validation before submission.
+- Every interactive element needs keyboard access, a visible focus ring, and ARIA labels where required. Target WCAG 2.1 AA.
+- Use `next/image` for all images, `next/link` for all internal navigation.
+- Do not add `"use client"` to layouts or pages when only a child needs it.
+
+## Backend (ASP.NET Core)
+
+- **Fat service / thin controller.** Controllers are HTTP translation only (≤ 15 lines per action). All business logic, EF queries, and Identity calls live in services under `Services/<Domain>/`.
+- Services throw typed domain exceptions (`ValidationException`, `NotFoundException`, `ConflictException`, `UnauthorizedException`). Controllers catch these and map to HTTP status codes — nothing else.
+- Every list endpoint is paginated. Use `PaginatedQuery` (base) and `PagedResponse<T>` from `MindedConnections.Shared`.
+- Structured Serilog logging at the service layer only. Use message templates — never string interpolation: `_logger.LogInformation("Created {UserId}", id)` not `$"Created {id}"`.
+- Rate limiting on all public and auth endpoints using ASP.NET Core's built-in `RateLimiter` middleware.
+- All EF calls must be async (`ToListAsync`, `FirstOrDefaultAsync`, `SaveChangesAsync`). Never `ToList()` before `Where()`. Use `Select()` projections — never return full entity graphs to the API layer.
+- Secrets (`Jwt:Secret`, connection strings) go in `appsettings.Development.json` (gitignored) or environment variables — never committed to source control.
+
+## Documentation
+
+- Every directory with source code must have a `README.md`. Create one before adding code to an undocumented directory.
+- READMEs must cover: purpose, what belongs here, file list with one-line descriptions, conventions specific to this directory.
+- Update the README whenever you change the directory's contents or structure.
+- Do not copy `STANDARDS.md` content into READMEs — link to the relevant section number instead.
+- TypeScript: JSDoc (`/** */`) on exported functions and hooks where the name alone doesn't explain the purpose.
+- C#: XML doc comments (`///`) on all public service interface members.
+
+## Universal rules
+
+- No business logic in controllers
+- No raw hex colors or hard-coded pixel values (frontend)
+- No `async void` — always `async Task`
+- No `.Result` / `.Wait()` on async calls
+- No unbounded list endpoints
+- No logging of passwords, tokens, or PII
+- No `export default` outside of Next.js page files
+- No commented-out code — delete it, git has history
+- No dead imports

@@ -271,3 +271,348 @@ return isOpen ? <Dialog>…</Dialog> : null; // fine at leaf level, but avoid ne
 | Duplicating CSS that already exists in `globals.css` | Creates drift between token system and actual styles |
 | Importing from `react` as `import React from "react"` | Use namespace import: `import * as React from "react"` |
 | Creating a new UI primitive instead of using/extending `components/ui/` | Fragments the component library |
+
+---
+
+---
+
+# Backend Standards (ASP.NET Core)
+
+---
+
+## 12. Architecture — Fat Service / Thin Controller
+
+Controllers are **routing and HTTP translation only**. All business logic lives in services.
+
+### Controller rules
+- One controller per resource (`UsersController`, `AppointmentsController`).
+- Actions must not contain business logic, query building, or EF calls — delegate everything to the injected service.
+- Actions should be ≤ 15 lines. If longer, something belongs in the service.
+- Catch only typed domain exceptions and map them to HTTP responses:
+
+```csharp
+// ✅ correct
+[HttpPost]
+public async Task<IActionResult> Create(CreateProviderRequest req)
+{
+    try
+    {
+        var user = await _users.CreateProviderAsync(req);
+        return CreatedAtAction(nameof(GetById), new { id = user.Id }, user);
+    }
+    catch (ValidationException ex) { return BadRequest(new { errors = ex.Errors }); }
+    catch (ConflictException ex)   { return Conflict(new { error = ex.Message }); }
+}
+
+// ❌ wrong — business logic in controller
+[HttpPost]
+public async Task<IActionResult> Create(CreateProviderRequest req)
+{
+    var existing = await _db.Users.FirstOrDefaultAsync(u => u.Email == req.Email);
+    if (existing != null) return Conflict("Email already taken.");
+    // ...
+}
+```
+
+### Service rules
+- One interface + one implementation per domain area: `IUsersService` / `UsersService`.
+- Place each service pair in its own subfolder: `Services/Users/`, `Services/Auth/`, `Services/Scheduling/`.
+- Services own all domain logic: validation, EF queries, Identity calls, external integrations.
+- Services throw typed exceptions (`ValidationException`, `NotFoundException`, `ConflictException`, `UnauthorizedException`) — never return raw HTTP status codes.
+- Inject `ILogger<TService>` in every service; log meaningful events (see §14).
+
+### Shared project
+- DTOs, query objects, response wrappers, and domain exceptions live in `MindedConnections.Shared`.
+- Never reference the API project from the Shared project (one-way dependency).
+
+---
+
+## 13. Pagination
+
+Every list endpoint that may return more than 20 records **must** be paginated.
+
+### Query objects
+Inherit from the shared `PaginatedQuery` base; add domain-specific filters as properties:
+
+```csharp
+public record UserListQuery : PaginatedQuery
+{
+    public string? Role   { get; init; }
+    public string? Search { get; init; }
+}
+```
+
+`PaginatedQuery` provides:
+- `SafePage` — clamped to ≥ 1
+- `SafePageSize` — clamped to `[1, MaxPageSize]` (override `MaxPageSize` per domain)
+- `Skip` — pre-computed offset for EF `Skip()`
+
+### Response wrapper
+All paginated responses use `PagedResponse<T>`:
+
+```csharp
+public record PagedResponse<T>(
+    IReadOnlyList<T> Items,
+    int Page,
+    int PageSize,
+    int Total,
+    int TotalPages,
+    bool HasNext,
+    bool HasPrev
+);
+```
+
+### Rules
+- Default `PageSize` is **20**; maximum is **100** (enforce in `SafePageSize`).
+- Never return unbounded lists — if a caller omits pagination params, apply the defaults.
+- Apply filters before counting: `Total` must reflect the filtered set, not the whole table.
+- Use `CountAsync()` + `Skip().Take().ToListAsync()` — never load then slice in memory.
+
+---
+
+## 14. Logging (Serilog)
+
+### What to log
+
+| Event | Level | Required context |
+|---|---|---|
+| Successful login | `Information` | `UserId`, `Email` |
+| Failed login attempt | `Warning` | `Email`, reason |
+| Account locked / suspicious activity | `Warning` | `Email`, IP |
+| User created / deleted | `Information` | `ActorId`, `TargetUserId`, role |
+| Token refreshed | `Debug` | `UserId` |
+| Token rejected / expired | `Warning` | reason |
+| Unhandled exception | `Error` | full exception |
+| App startup / shutdown | `Information` | — |
+| Health check hits | `Debug` | — |
+
+### How to log
+- Use structured logging — **never** string-interpolate into the message template:
+
+```csharp
+// ✅ correct
+_logger.LogInformation("User {UserId} created provider account {TargetEmail}", actorId, email);
+
+// ❌ wrong
+_logger.LogInformation($"User {actorId} created provider account {email}");
+```
+
+- Enrich every request with `UserId` via the Serilog middleware enricher; do not repeat it manually on every log call.
+- Log at the service layer, not in controllers.
+- Do not log passwords, tokens, or PII beyond what is necessary for audit purposes.
+
+### Configuration
+- Development: `Debug` minimum, EF command logging `Information`, console sink with ANSI theme.
+- Production: `Information` minimum, rolling file sink (daily, 14-day retention), structured JSON output.
+- Use `appsettings.json` overrides — never hard-code log levels in `Program.cs`.
+
+---
+
+## 15. Rate Limiting
+
+Every public-facing or auth endpoint must be rate-limited. Use ASP.NET Core's built-in `RateLimiter` middleware (`.NET 7+`).
+
+### Policies
+
+| Policy name | Applies to | Window | Limit | Queue |
+|---|---|---|---|---|
+| `auth` | `/auth/login`, `/auth/refresh` | 1 minute | 10 requests | 0 |
+| `api-global` | All other authenticated routes | 1 minute | 120 requests | 5 |
+| `admin` | `/admin/*`, `/users/*` | 1 minute | 60 requests | 2 |
+
+### Rules
+- Define policies in `Program.cs` via `builder.Services.AddRateLimiter(…)`.
+- Apply `[EnableRateLimiting("auth")]` to auth endpoints; apply the global policy via `app.UseRateLimiter()` on the pipeline.
+- Return `429 Too Many Requests` with a `Retry-After` header.
+- Log rate limit hits at `Warning` level with the client IP and endpoint.
+
+```csharp
+options.OnRejected = async (context, ct) =>
+{
+    context.HttpContext.Response.StatusCode = 429;
+    var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+    logger.LogWarning("Rate limit exceeded for {IP} on {Path}",
+        context.HttpContext.Connection.RemoteIpAddress,
+        context.HttpContext.Request.Path);
+    await context.HttpContext.Response.WriteAsync("Too many requests. Please try again later.", ct);
+};
+```
+
+---
+
+## 16. Validation
+
+### Input validation
+- Use `[ApiController]` — model binding errors automatically return `400` with a `ValidationProblemDetails` body; do not re-validate binding in the action.
+- For domain-level rules (email uniqueness, business constraints) throw `ValidationException` from the service.
+- Use `FluentValidation` for complex validators; register via `AddFluentValidation()` and keep validator classes co-located with their request DTOs.
+
+### Domain exceptions → HTTP mapping
+
+| Exception | HTTP status |
+|---|---|
+| `ValidationException` | `400 Bad Request` |
+| `UnauthorizedException` | `401 Unauthorized` |
+| `ForbiddenException` | `403 Forbidden` |
+| `NotFoundException` | `404 Not Found` |
+| `ConflictException` | `409 Conflict` |
+
+- Map exceptions in the controller `catch` block or via a global `IExceptionHandler` middleware — never swallow them silently.
+
+---
+
+## 17. Security
+
+- **Never** store plaintext passwords; always use `UserManager<AppUser>` (PBKDF2 by default).
+- JWT secrets must be ≥ 32 characters; store them in `appsettings.Development.json` (gitignored) or environment variables — never in `appsettings.json`.
+- Access tokens expire in **15 minutes**; refresh tokens expire in **7 days** and rotate on every use.
+- Revoke all refresh tokens on logout and on password change.
+- Enable CORS only for known origins; never use `AllowAnyOrigin` in production.
+- Sensitive config (`Jwt:Secret`, connection strings, seed credentials) must never be committed to source control. Use `appsettings.Development.json` (gitignored) locally and environment variables / secrets manager in production.
+- HTTPS only in production (`app.UseHttpsRedirection()`).
+
+---
+
+## 18. Database / Entity Framework
+
+- Use **async** EF methods exclusively (`ToListAsync`, `FirstOrDefaultAsync`, `SaveChangesAsync`).
+- Never call `SaveChangesAsync` inside a loop — batch changes, then save once.
+- Use explicit `Select()` projections for list queries; do not return full entity graphs to the API layer.
+- Keep migrations in the API project under `Migrations/`; commit every migration.
+- Never run `EnsureCreated` in production — always use `MigrateAsync` at startup.
+- Index foreign keys and any column used in `WHERE` / `ORDER BY` clauses in queries that run frequently.
+
+---
+
+## 19. Project Structure (Backend)
+
+```
+MindedConnections.sln
+  MindedConnections.Api/
+    Controllers/          ← thin controllers, one per resource
+    Services/
+      Auth/               ← IAuthService, AuthService
+      Users/              ← IUsersService, UsersService
+      Jwt/                ← IJwtService, JwtService
+      Scheduling/         ← ISchedulingService, SchedulingService
+    Middleware/           ← global exception handler, request enrichment
+    Migrations/
+    Program.cs
+    appsettings.json
+    appsettings.Development.json   ← gitignored
+
+  MindedConnections.Shared/
+    Dtos/                 ← request/response DTOs grouped by domain
+    Queries/              ← PaginatedQuery, domain-specific query records
+    Responses/            ← PagedResponse<T>, standard envelope types
+    Exceptions/           ← ValidationException, NotFoundException, etc.
+```
+
+- One file per class. File name matches the class name.
+- No logic in `Program.cs` beyond service registration and middleware pipeline setup.
+- Extension methods (`AddUsersServices()`, `AddAuthServices()`) in dedicated static classes to keep `Program.cs` readable.
+
+---
+
+## 20. What NOT to do (Backend)
+
+---
+
+---
+
+# Documentation Standards
+
+---
+
+## 21. README Requirements
+
+Every directory that contains source code **must** have a `README.md`. This is enforced for humans and agents alike — an agent encountering an undocumented directory should create the README before adding code to it.
+
+### Required README sections by directory type
+
+**Package / project root** (`frontend/`, `backend/MindedConnections.Api/`, etc.)
+- One-line purpose statement
+- Tech stack with versions
+- How to run locally (commands, env vars required)
+- How to run tests
+- Link to relevant sections of `STANDARDS.md`
+
+**Feature directory** (`hooks/`, `lib/`, `Services/Users/`, etc.)
+- One-line purpose statement
+- What belongs here and what does not
+- List of files with a one-line description of each
+- Any conventions specific to this directory (naming, patterns used)
+
+**Route/page directory** (`app/admin/`, `app/portal/patient/`, etc.)
+- What route(s) this covers
+- Auth requirement (public / role-gated)
+- Data dependencies (which hooks/APIs the page uses)
+
+### Rules
+- READMEs are written in plain Markdown — no JSX, no code that needs to compile.
+- Keep them short and scannable. Bullet points over paragraphs.
+- **Update the README when you change the directory** — stale docs are worse than no docs.
+- Do not duplicate the content of `STANDARDS.md` in a README — link to it instead.
+- READMEs are excluded from linting and test coverage; they are documentation, not code.
+
+### What NOT to put in a README
+- Implementation details that belong in inline comments
+- Secrets, credentials, or sample `.env` values with real data
+- Changelog entries — use git commit messages for that
+
+---
+
+## 22. Inline Code Documentation
+
+### TypeScript / React
+- Export every public function, hook, and component with a JSDoc comment when its purpose is not obvious from the name and signature alone:
+
+```ts
+/**
+ * Parses ASP.NET Identity error strings and routes them to the correct
+ * form field or a general form-level error message.
+ */
+export function parseIdentityErrors(raw: string, fieldMap: …) { … }
+```
+
+- One-liner JSDoc is fine for simple utilities; skip it entirely for trivially named functions (`formatDate`, `cn`).
+- Do not comment *what* the code does — comment *why* it does it when the reason is non-obvious.
+
+### C# / ASP.NET
+- Use XML doc comments (`///`) on all public service interface members:
+
+```csharp
+/// <summary>
+/// Creates a new provider account and sends a welcome email.
+/// Throws <see cref="ValidationException"/> if the email is already registered.
+/// </summary>
+Task<UserDto> CreateProviderAsync(CreateProviderRequest request);
+```
+
+- Controllers do not need XML docs — Swagger/OpenAPI picks up `[ProducesResponseType]` attributes instead.
+- Use `// reason:` inline comments to explain non-obvious decisions (e.g. why a particular EF query is structured a certain way).
+
+---
+
+## 23. What NOT to do (Documentation)
+
+| Pattern | Why |
+|---|---|
+| Skipping the README for a new directory | Next developer (or agent) has no context |
+| Copying `STANDARDS.md` content into READMEs | Creates drift when standards change |
+| Writing READMEs that describe obvious things (`"this folder contains hooks"`) | Noise; document the non-obvious |
+| Leaving stale READMEs after refactors | Misleads more than no docs at all |
+| Putting secrets or real env values in docs | Security risk |
+
+| Pattern | Why |
+|---|---|
+| Business logic in controllers | Untestable, bloated, violates single responsibility |
+| Raw SQL strings in application code | SQL injection risk; use EF parameterised queries |
+| `async void` methods | Exceptions are unobservable; use `async Task` |
+| `.Result` or `.Wait()` on async calls | Deadlocks in ASP.NET context; always `await` |
+| Returning `IQueryable` from services | Leaks persistence concerns into callers |
+| Logging sensitive data (passwords, tokens, PII) | Compliance and security violation |
+| Hard-coding secrets in source files | Credential exposure in version control |
+| Catching `Exception` and swallowing it | Hides bugs; only catch what you can handle |
+| `ToList()` before `Where()` | Loads entire table into memory before filtering |
+| Unbounded list endpoints | DoS risk and poor performance at scale |
