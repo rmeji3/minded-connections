@@ -10,31 +10,75 @@ ASP.NET Core 10 backend for MindEd Connections. Composed of three projects:
 | `MindedConnections.Scheduling` | [→](MindedConnections.Scheduling/README.md) | Scheduling microservice — appointments, availability |
 | `MindedConnections.Shared` | [→](MindedConnections.Shared/README.md) | Shared DTOs, query objects, response wrappers, exceptions |
 
-## Running locally
+## First-time setup (after cloning)
+
+> ⚠️ `dotnet run` must be run from inside a project folder, not from `backend/`. Running it from `backend/` will fail with "no .csproj found".
 
 ```bash
-# Core API (port 5050)
+# 1. Restore NuGet packages for the whole solution
+cd backend
+dotnet restore MindedConnections.sln
+
+# 2. Create appsettings.Development.json in each API project (see below)
+
+# 3. Run the core API
 cd MindedConnections.Api
 dotnet run
+# → http://localhost:5050
 
-# Scheduling service (port 5051)
-cd MindedConnections.Scheduling
+# 4. (Optional) Run the scheduling service in a second terminal
+cd ../MindedConnections.Scheduling
 dotnet run
+# → http://localhost:5051
 ```
 
-**Required `appsettings.Development.json`** (gitignored — create manually):
+## Required: `appsettings.Development.json`
+
+This file is gitignored — you must create it manually in **each** API project folder before running.
+
+**`MindedConnections.Api/appsettings.Development.json`:**
 ```json
 {
-  "ConnectionStrings": { "Default": "Host=localhost;Port=5432;Database=minded;Username=postgres;Password=postgres" },
+  "Serilog": {
+    "MinimumLevel": {
+      "Default": "Debug",
+      "Override": {
+        "Microsoft": "Information",
+        "Microsoft.EntityFrameworkCore.Database.Command": "Information"
+      }
+    }
+  },
+  "ConnectionStrings": {
+    "Default": "Host=localhost;Port=5432;Database=minded;Username=postgres;Password=postgres"
+  },
   "Jwt": {
-    "Secret": "<32+ char secret>",
+    "Secret": "minded-connections-dev-secret-key-2026!!",
     "Issuer": "minded-connections-api",
     "Audience": "minded-connections-clients"
   },
-  "Seed": { "AdminEmail": "you@example.com", "AdminPassword": "Password1!" },
-  "Cookie": { "Secure": false }
+  "Seed": {
+    "AdminEmail": "you@example.com",
+    "AdminPassword": "Password1!"
+  },
+  "Cookie": {
+    "Secure": false
+  }
 }
 ```
+
+**`MindedConnections.Scheduling/appsettings.Development.json`:**
+```json
+{
+  "ConnectionStrings": {
+    "Default": "Host=localhost;Port=5432;Database=minded;Username=postgres;Password=postgres"
+  }
+}
+```
+
+## Requirements
+
+- [.NET SDK 10](https://dotnet.microsoft.com/download) (`global.json` pins the version)
+- PostgreSQL running on port 5432
 
 ## Standards
 
