@@ -57,13 +57,15 @@ export class ApiError extends Error {
 
 interface RequestOptions extends Omit<RequestInit, "body"> {
   body?: unknown;
+  /** Skip the automatic silent-refresh retry on 401. Use for auth endpoints. */
+  skipRefresh?: boolean;
 }
 
 export async function apiRequest<T>(
   path: string,
   options: RequestOptions = {},
 ): Promise<T> {
-  const { body, headers: extraHeaders, ...rest } = options;
+  const { body, headers: extraHeaders, skipRefresh, ...rest } = options;
 
   const makeRequest = (token: string | null) =>
     fetch(`${API_BASE}${path}`, {
@@ -79,8 +81,9 @@ export async function apiRequest<T>(
 
   let res = await makeRequest(_accessToken);
 
-  // Silent refresh on 401 then retry once
-  if (res.status === 401) {
+  // Silent refresh on 401 then retry once — but never for auth endpoints
+  // where a 401 means bad credentials, not an expired session.
+  if (res.status === 401 && !skipRefresh) {
     const refreshed = await silentRefresh();
     if (!refreshed) throw new ApiError(401, "Session expired");
     res = await makeRequest(_accessToken);

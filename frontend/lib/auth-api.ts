@@ -25,17 +25,26 @@ export interface LoginCredentials {
 // ─────────────────────────────────────────────────────────────────────────────
 
 export async function loginRequest(credentials: LoginCredentials): Promise<LoginResponse> {
+  // Clear any stale token before attempting login so the request goes out
+  // unauthenticated and a 401 (bad credentials) is never misread as an
+  // expired-session 401 that triggers a silent refresh.
+  setAccessToken(null);
   const data = await apiRequest<LoginResponse>("/auth/login", {
     method: "POST",
     body: credentials,
+    skipRefresh: true,
   });
   setAccessToken(data.accessToken);
   return data;
 }
 
 export async function logoutRequest(): Promise<void> {
-  await apiRequest<void>("/auth/logout", { method: "POST" });
+  // Clear the token first so a stale/expired token never blocks the logout
+  // request and is always gone even if the network call fails.
   setAccessToken(null);
+  await apiRequest<void>("/auth/logout", { method: "POST" }).catch(() => {
+    // Best-effort — local state is already cleared above.
+  });
 }
 
 /**
