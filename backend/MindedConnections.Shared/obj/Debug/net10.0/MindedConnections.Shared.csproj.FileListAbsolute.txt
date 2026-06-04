@@ -1,0 +1,12 @@
+A:\Coding\minded-connections\backend\MindedConnections.Shared\bin\Debug\net10.0\MindedConnections.Shared.deps.json
+A:\Coding\minded-connections\backend\MindedConnections.Shared\bin\Debug\net10.0\MindedConnections.Shared.dll
+A:\Coding\minded-connections\backend\MindedConnections.Shared\bin\Debug\net10.0\MindedConnections.Shared.pdb
+A:\Coding\minded-connections\backend\MindedConnections.Shared\obj\Debug\net10.0\MindedConnections.Shared.GeneratedMSBuildEditorConfig.editorconfig
+A:\Coding\minded-connections\backend\MindedConnections.Shared\obj\Debug\net10.0\MindedConnections.Shared.AssemblyInfoInputs.cache
+A:\Coding\minded-connections\backend\MindedConnections.Shared\obj\Debug\net10.0\MindedConnections.Shared.AssemblyInfo.cs
+A:\Coding\minded-connections\backend\MindedConnections.Shared\obj\Debug\net10.0\MindedConnections.Shared.csproj.CoreCompileInputs.cache
+A:\Coding\minded-connections\backend\MindedConnections.Shared\obj\Debug\net10.0\MindedConnections.Shared.sourcelink.json
+A:\Coding\minded-connections\backend\MindedConnections.Shared\obj\Debug\net10.0\MindedConnections.Shared.dll
+A:\Coding\minded-connections\backend\MindedConnections.Shared\obj\Debug\net10.0\refint\MindedConnections.Shared.dll
+A:\Coding\minded-connections\backend\MindedConnections.Shared\obj\Debug\net10.0\MindedConnections.Shared.pdb
+A:\Coding\minded-connections\backend\MindedConnections.Shared\obj\Debug\net10.0\ref\MindedConnections.Shared.dll

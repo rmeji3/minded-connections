@@ -1,0 +1,6 @@
+@MindedConnections.Scheduling_HostAddress = http://localhost:5020
+
+GET {{MindedConnections.Scheduling_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

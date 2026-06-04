@@ -12,13 +12,16 @@
 
 # testing
 /coverage
+appsettings.Development.json
 
 # next.js
-/.next/
+.next/
 /out/
+frontend/out/
 
 # production
 /build
+frontend/.next/
 
 # misc
 .DS_Store
