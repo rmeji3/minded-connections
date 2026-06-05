@@ -9,4 +9,12 @@ public record BookAppointmentRequest
 
     [MaxLength(1000)]
     public string? Notes { get; init; }
+
+    [Required]
+    [MaxLength(50)]
+    public string VisitType { get; init; } = default!;
+
+    [Required]
+    [AllowedValues("telehealth", "in-person")]
+    public string VisitMode { get; init; } = default!;
 }

@@ -9,8 +9,12 @@ public class TenantMiddleware(RequestDelegate next)
 
     public async Task InvokeAsync(HttpContext context, SchedulingDbContext db)
     {
-        // Health endpoint is public — no tenant required.
-        if (context.Request.Path.StartsWithSegments("/health"))
+        // Health, developer docs, and system tenant administration endpoints are public/system-level
+        // (the latter is secured separately via JWT Admin authorization) — no tenant API key required.
+        if (context.Request.Path.StartsWithSegments("/health") ||
+            context.Request.Path.StartsWithSegments("/scalar") ||
+            context.Request.Path.StartsWithSegments("/openapi") ||
+            context.Request.Path.StartsWithSegments("/tenants"))
         {
             await next(context);
             return;

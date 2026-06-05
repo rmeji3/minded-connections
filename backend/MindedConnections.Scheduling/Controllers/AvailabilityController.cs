@@ -27,7 +27,7 @@ public class AvailabilityController(IAvailabilityService availability, ITenantCo
     public async Task<IActionResult> Upsert(string providerId, DayOfWeek day, UpsertAvailabilityRequest request)
     {
         // Providers can only manage their own availability.
-        if (User.IsInRole("Provider") && User.FindFirst("sub")?.Value != providerId)
+        if (User.IsInRole("Provider") && (User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? User.FindFirst("sub")?.Value) != providerId)
             return Forbid();
 
         try
@@ -44,7 +44,7 @@ public class AvailabilityController(IAvailabilityService availability, ITenantCo
     [ProducesResponseType(404)]
     public async Task<IActionResult> Delete(string providerId, DayOfWeek day)
     {
-        if (User.IsInRole("Provider") && User.FindFirst("sub")?.Value != providerId)
+        if (User.IsInRole("Provider") && (User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? User.FindFirst("sub")?.Value) != providerId)
             return Forbid();
 
         var found = await availability.DeleteAsync(tenant.TenantId, providerId, day);

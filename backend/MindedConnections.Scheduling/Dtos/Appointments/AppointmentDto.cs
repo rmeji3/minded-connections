@@ -13,5 +13,9 @@ public record AppointmentDto(
     string? Notes,
     DateTime CreatedAt,
     DateTime? CancelledAt,
-    string? CancellationReason
+    string? CancellationReason,
+    string VisitType,
+    string VisitMode,
+    string? MeetingUrl,
+    string? RecurrenceGroupId
 );

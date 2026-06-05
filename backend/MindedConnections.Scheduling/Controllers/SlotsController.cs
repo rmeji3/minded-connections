@@ -22,6 +22,9 @@ public class SlotsController(ISlotService slots, ITenantContext tenant) : Contro
         if (string.IsNullOrWhiteSpace(providerId))
             return BadRequest(new { error = "providerId is required." });
 
+        if (from.Date < DateTime.UtcNow.Date)
+            return BadRequest(new { error = "from must not be in the past." });
+
         if (to <= from)
             return BadRequest(new { error = "to must be after from." });
 

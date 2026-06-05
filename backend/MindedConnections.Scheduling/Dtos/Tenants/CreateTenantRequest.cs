@@ -9,4 +9,6 @@ public record CreateTenantRequest
 
     [Required, RegularExpression(@"^[a-z0-9-]+$", ErrorMessage = "Slug must be lowercase alphanumeric with hyphens.")]
     public string Slug { get; init; } = default!;
+
+    public List<string>? InitialServices { get; init; }
 }

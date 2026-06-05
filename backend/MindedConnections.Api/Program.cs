@@ -125,7 +125,34 @@ try
     builder.Services.AddHttpContextAccessor();
 
     builder.Services.AddControllers();
-    builder.Services.AddOpenApi();
+    builder.Services.AddOpenApi(options =>
+    {
+        options.AddDocumentTransformer((document, context, cancellationToken) =>
+        {
+            document.Components ??= new Microsoft.OpenApi.OpenApiComponents();
+            document.Components.SecuritySchemes ??= new Dictionary<string, Microsoft.OpenApi.IOpenApiSecurityScheme>();
+            
+            // Define JWT Bearer Authentication scheme
+            var bearerScheme = new Microsoft.OpenApi.OpenApiSecurityScheme
+            {
+                Type = Microsoft.OpenApi.SecuritySchemeType.Http,
+                Scheme = "bearer",
+                BearerFormat = "JWT",
+                In = Microsoft.OpenApi.ParameterLocation.Header,
+                Description = "Enter your Supabase JWT access token"
+            };
+            document.Components.SecuritySchemes.Add("Bearer", bearerScheme);
+
+            // Apply JWT Bearer security requirements globally to the document
+            var requirement = new Microsoft.OpenApi.OpenApiSecurityRequirement
+            {
+                [new Microsoft.OpenApi.OpenApiSecuritySchemeReference("Bearer", document)] = new List<string>()
+            };
+            document.Security = new List<Microsoft.OpenApi.OpenApiSecurityRequirement> { requirement };
+
+            return Task.CompletedTask;
+        });
+    });
 
     // ── Build ─────────────────────────────────────────────────────────────────
     var app = builder.Build();

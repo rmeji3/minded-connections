@@ -4,6 +4,7 @@ export type Step = 1 | 2 | 3 | 4;
 export type VisitMode = "telehealth" | "in-person";
 
 export interface Appointment {
+  id: string;
   month: string;
   day: number;
   dow: string;
@@ -16,6 +17,7 @@ export interface Appointment {
   location?: string;
   note?: string;
   primaryAction: "join" | "view";
+  meetingUrl?: string;
   countdown?: string;
 }
 

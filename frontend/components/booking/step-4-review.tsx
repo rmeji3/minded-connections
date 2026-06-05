@@ -2,15 +2,17 @@
 
 import { VISIT_TYPES } from "@/lib/appointments-data";
 import type { Step, VisitMode } from "@/lib/appointments-types";
+import { SlotDto } from "@/lib/scheduling-api";
 
 interface Step4Props {
   visitType: string | null;
   visitMode: VisitMode;
-  selectedDate: number | null;
-  selectedTime: string | null;
+  selectedDate: Date | null;
+  selectedSlot: SlotDto | null;
   notes: string;
   onJumpToStep: (s: Step) => void;
   onConfirm: () => void;
+  isSubmitting: boolean;
 }
 
 interface SummaryRowProps {
@@ -62,13 +64,18 @@ function SummaryRow({ icon, label, value, sub, onClick, actionLabel }: SummaryRo
   );
 }
 
-export function Step4Review({ visitType, visitMode, selectedDate, selectedTime, notes, onJumpToStep, onConfirm }: Step4Props) {
+function formatTime(isoString: string) {
+  const localTimeStr = isoString.endsWith('Z') ? isoString.slice(0, -1) : isoString;
+  return new Date(localTimeStr).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+}
+
+export function Step4Review({ visitType, visitMode, selectedDate, selectedSlot, notes, onJumpToStep, onConfirm, isSubmitting }: Step4Props) {
   const visitLabel = VISIT_TYPES.find((v) => v.id === visitType)?.label ?? "Appointment";
   const spaceIdx = visitLabel.indexOf(" ");
   const visitPre = spaceIdx > -1 ? visitLabel.substring(0, spaceIdx + 1) : "";
   const visitEm = spaceIdx > -1 ? visitLabel.substring(spaceIdx + 1) : visitLabel;
-  const dateStr = selectedDate ? `Tue, May ${selectedDate}` : "—";
-  const timeStr = selectedTime ?? "—";
+  const dateStr = selectedDate ? selectedDate.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' }) : "—";
+  const timeStr = selectedSlot ? formatTime(selectedSlot.startsAt) : "—";
 
   return (
     <div style={{ border: "1px solid var(--linen)", borderRadius: 12, overflow: "hidden" }}>
@@ -92,7 +99,7 @@ export function Step4Review({ visitType, visitMode, selectedDate, selectedTime, 
           icon={<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18"/><path d="M8 3v4M16 3v4"/></svg>}
           label="DATE & TIME"
           value={`${dateStr} · ${timeStr}`}
-          sub="30 min · Pacific Time"
+          sub="Local Time"
           onClick={() => onJumpToStep(2)}
           actionLabel="Edit"
         />
@@ -126,8 +133,8 @@ export function Step4Review({ visitType, visitMode, selectedDate, selectedTime, 
         )}
 
         <div style={{ borderTop: "1px solid var(--linen)", paddingTop: "1rem", display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-          <button className="btn-primary" onClick={onConfirm} style={{ width: "100%", letterSpacing: "0.08em" }}>
-            CONFIRM APPOINTMENT
+          <button className="btn-primary" onClick={onConfirm} disabled={isSubmitting} style={{ width: "100%", letterSpacing: "0.08em", opacity: isSubmitting ? 0.7 : 1, cursor: isSubmitting ? "not-allowed" : "pointer" }}>
+            {isSubmitting ? "CONFIRMING..." : "CONFIRM APPOINTMENT"}
           </button>
           <p style={{ fontSize: "0.8125rem", color: "var(--stone-500)", textAlign: "center", margin: 0 }}>
             By confirming you agree to our{" "}

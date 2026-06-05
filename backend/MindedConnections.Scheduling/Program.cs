@@ -1,13 +1,20 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using MindedConnections.Scheduling.Data;
 using MindedConnections.Scheduling.Middleware;
 using MindedConnections.Scheduling.Services.Appointments;
+using MindedConnections.Scheduling.Services.Audit;
 using MindedConnections.Scheduling.Services.Availability;
+using MindedConnections.Scheduling.Services.BlockedSlots;
+using MindedConnections.Scheduling.Services.CareRelationships;
+using MindedConnections.Scheduling.Services.Notifications;
 using MindedConnections.Scheduling.Services.Slots;
 using MindedConnections.Scheduling.Services.Tenants;
+using MindedConnections.Scheduling.Services.ServiceTypes;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,8 +24,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddInMemoryCollection(
     new Dictionary<string, string?>
     {
-        ["ConnectionStrings:Scheduling"] = Environment.GetEnvironmentVariable("SCHEDULING_DATABASE_URL"),
-        ["Cors:Origin"]                  = Environment.GetEnvironmentVariable("CORS_ORIGIN"),
+        ["ConnectionStrings:Scheduling"]          = Environment.GetEnvironmentVariable("SCHEDULING_DATABASE_URL"),
+        ["Cors:Origin"]                           = Environment.GetEnvironmentVariable("CORS_ORIGIN"),
+        ["Jitsi:BaseUrl"]                         = Environment.GetEnvironmentVariable("JITSI_BASE_URL"),
+        ["Supabase:Authority"]                    = Environment.GetEnvironmentVariable("SUPABASE_AUTHORITY"),
+        ["Scheduling:CancellationDeadlineHours"]  = Environment.GetEnvironmentVariable("CANCELLATION_DEADLINE_HOURS"),
+        ["Scheduling:RescheduleDeadlineHours"]    = Environment.GetEnvironmentVariable("RESCHEDULE_DEADLINE_HOURS"),
+        ["Scheduling:MaxRescheduleCount"]         = Environment.GetEnvironmentVariable("MAX_RESCHEDULE_COUNT"),
     }.Where(kv => kv.Value is not null)!
 );
 
@@ -34,7 +46,7 @@ builder.Services.AddDbContext<SchedulingDbContext>(opt =>
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(opt =>
     {
-        opt.Authority = "https://xkmvkglvktoczljmetxv.supabase.co/auth/v1";
+        opt.Authority = builder.Configuration["Supabase:Authority"];
         opt.TokenValidationParameters = new()
         {
             ValidAudience    = "authenticated",
@@ -44,9 +56,46 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 // Extracts app_metadata.role from the Supabase JWT and maps it to ClaimTypes.Role.
-builder.Services.AddTransient<IClaimsTransformation, MindedConnections.Scheduling.Middleware.SupabaseClaimsTransformation>();
+builder.Services.AddTransient<IClaimsTransformation, SupabaseClaimsTransformation>();
 
 builder.Services.AddAuthorization();
+
+// ---------------------------------------------------------------------------
+// Rate limiting
+// ---------------------------------------------------------------------------
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddFixedWindowLimiter("booking", opt =>
+    {
+        opt.Window               = TimeSpan.FromMinutes(1);
+        opt.PermitLimit          = 10;
+        opt.QueueLimit           = 0;
+        opt.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+    });
+
+    options.AddFixedWindowLimiter("api-global", opt =>
+    {
+        opt.Window               = TimeSpan.FromMinutes(1);
+        opt.PermitLimit          = 120;
+        opt.QueueLimit           = 5;
+        opt.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+    });
+
+    options.OnRejected = async (context, ct) =>
+    {
+        context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
+        if (context.Lease.TryGetMetadata(MetadataName.RetryAfter, out var retryAfter))
+            context.HttpContext.Response.Headers.RetryAfter =
+                ((int)retryAfter.TotalSeconds).ToString();
+
+        var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+        logger.LogWarning("Rate limit exceeded for {IP} on {Path}",
+            context.HttpContext.Connection.RemoteIpAddress,
+            context.HttpContext.Request.Path);
+
+        await context.HttpContext.Response.WriteAsync("Too many requests. Please try again later.", ct);
+    };
+});
 
 // ---------------------------------------------------------------------------
 // CORS
@@ -68,13 +117,75 @@ builder.Services.AddScoped<ITenantContext>(sp => sp.GetRequiredService<TenantCon
 // ---------------------------------------------------------------------------
 // Domain services
 // ---------------------------------------------------------------------------
-builder.Services.AddScoped<ITenantService,      TenantService>();
-builder.Services.AddScoped<IAvailabilityService, AvailabilityService>();
-builder.Services.AddScoped<ISlotService,         SlotService>();
-builder.Services.AddScoped<IAppointmentService,  AppointmentService>();
+builder.Services.AddScoped<ITenantService,            TenantService>();
+builder.Services.AddScoped<IAvailabilityService,      AvailabilityService>();
+builder.Services.AddScoped<ISlotService,              SlotService>();
+builder.Services.AddScoped<IAppointmentService,       AppointmentService>();
+builder.Services.AddScoped<IServiceTypeService,       ServiceTypeService>();
+builder.Services.AddScoped<IAuditService,             AuditService>();
+builder.Services.AddScoped<INotificationService,      NotificationService>();
+builder.Services.AddScoped<ICareRelationshipService,  CareRelationshipService>();
+builder.Services.AddScoped<IBlockedSlotService,       BlockedSlotService>();
 
-builder.Services.AddControllers();
-builder.Services.AddOpenApi();
+// ---------------------------------------------------------------------------
+// Email sender — swap ConsoleEmailSender for a real provider when ready.
+// See appsettings.json "Email" section for required configuration keys.
+// ---------------------------------------------------------------------------
+builder.Services.AddScoped<IEmailSender, ConsoleEmailSender>();
+
+// ---------------------------------------------------------------------------
+// Background notification worker
+// ---------------------------------------------------------------------------
+builder.Services.AddHostedService<NotificationWorker>();
+
+// ---------------------------------------------------------------------------
+// Global exception handler
+// ---------------------------------------------------------------------------
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(
+            new System.Text.Json.Serialization.JsonStringEnumConverter());
+    });
+
+builder.Services.AddOpenApi(options =>
+{
+    options.AddDocumentTransformer((document, context, cancellationToken) =>
+    {
+        document.Components ??= new Microsoft.OpenApi.OpenApiComponents();
+        document.Components.SecuritySchemes ??= new Dictionary<string, Microsoft.OpenApi.IOpenApiSecurityScheme>();
+
+        document.Components.SecuritySchemes.Add("Bearer", new Microsoft.OpenApi.OpenApiSecurityScheme
+        {
+            Type         = Microsoft.OpenApi.SecuritySchemeType.Http,
+            Scheme       = "bearer",
+            BearerFormat = "JWT",
+            In           = Microsoft.OpenApi.ParameterLocation.Header,
+            Description  = "Enter your Supabase JWT access token",
+        });
+        document.Components.SecuritySchemes.Add("ApiKey", new Microsoft.OpenApi.OpenApiSecurityScheme
+        {
+            Type        = Microsoft.OpenApi.SecuritySchemeType.ApiKey,
+            Name        = "X-Api-Key",
+            In          = Microsoft.OpenApi.ParameterLocation.Header,
+            Description = "Enter your Tenant API key (starts with sk_)",
+        });
+
+        document.Security = new List<Microsoft.OpenApi.OpenApiSecurityRequirement>
+        {
+            new()
+            {
+                [new Microsoft.OpenApi.OpenApiSecuritySchemeReference("Bearer", document)] = new List<string>(),
+                [new Microsoft.OpenApi.OpenApiSecuritySchemeReference("ApiKey",  document)] = new List<string>(),
+            }
+        };
+
+        return Task.CompletedTask;
+    });
+});
 
 var app = builder.Build();
 
@@ -92,21 +203,21 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
     app.MapScalarApiReference(opt =>
     {
-        opt.Title = "MindEd Connections — Scheduling API";
-        opt.Theme = ScalarTheme.Moon;
+        opt.Title             = "MindEd Connections — Scheduling API";
+        opt.Theme             = ScalarTheme.Moon;
         opt.DefaultHttpClient = new(ScalarTarget.CSharp, ScalarClient.HttpClient);
     });
 }
 
+app.UseExceptionHandler();
 app.UseHttpsRedirection();
 app.UseCors();
+app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Tenant resolution runs after auth so we have the user identity in scope.
 app.UseMiddleware<TenantMiddleware>();
 
-// Populate the scoped TenantContext from HttpContext.Items set by TenantMiddleware.
 app.Use(async (context, next) =>
 {
     if (context.Items.TryGetValue("TenantId", out var tenantId) && tenantId is string id)
@@ -117,7 +228,7 @@ app.Use(async (context, next) =>
     await next();
 });
 
-app.MapControllers();
+app.MapControllers().RequireRateLimiting("api-global");
 
 app.MapGet("/health", (IWebHostEnvironment env) =>
     Results.Ok(new { status = "ok", service = "scheduling", environment = env.EnvironmentName }));

@@ -32,6 +32,22 @@ public class TenantService(SchedulingDbContext db, ILogger<TenantService> logger
         };
 
         db.Tenants.Add(tenant);
+
+        if (request.InitialServices != null && request.InitialServices.Any())
+        {
+            foreach (var serviceName in request.InitialServices)
+            {
+                var serviceType = new ServiceType
+                {
+                    TenantId = tenant.Id,
+                    Name = serviceName,
+                    DurationMin = 60,
+                    IsActive = true
+                };
+                db.ServiceTypes.Add(serviceType);
+            }
+        }
+
         await db.SaveChangesAsync();
 
         logger.LogInformation("Tenant {TenantId} ({Slug}) created", tenant.Id, tenant.Slug);
@@ -50,6 +66,21 @@ public class TenantService(SchedulingDbContext db, ILogger<TenantService> logger
 
         logger.LogInformation("Tenant {TenantId} deactivated", tenantId);
         return true;
+    }
+
+    public async Task<CreateTenantResponse> RotateApiKeyAsync(string tenantId)
+    {
+        var tenant = await db.Tenants.FindAsync(tenantId)
+            ?? throw new NotFoundException($"Tenant '{tenantId}' not found.");
+
+        var plainKey   = GenerateApiKey();
+        tenant.ApiKeyHash = TenantMiddleware.ComputeHash(plainKey);
+        await db.SaveChangesAsync();
+
+        logger.LogInformation("API key rotated for tenant {TenantId}", tenantId);
+
+        var dto = new TenantDto(tenant.Id, tenant.Name, tenant.Slug, tenant.IsActive, tenant.CreatedAt);
+        return new CreateTenantResponse(dto, plainKey);
     }
 
     private static string GenerateApiKey() =>
