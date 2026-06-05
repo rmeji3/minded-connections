@@ -141,7 +141,7 @@ export default function AppointmentsPage() {
         timeRange: formatTimeRange(a.startsAt, a.endsAt),
         provider: "Dr. Provider", // Mock
         duration: getDurationStr(a.startsAt, a.endsAt),
-        note: a.notes, primaryAction: (a.visitMode === "telehealth" ? "join" : "view") as const,
+        note: a.notes, primaryAction: (a.visitMode === "telehealth" ? "join" : "view") as "join" | "view",
         meetingUrl: a.meetingUrl,
       };
     })};
