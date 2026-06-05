@@ -5,7 +5,8 @@ import { Toaster as SonnerToaster } from "sonner";
 export function Toaster() {
   return (
     <SonnerToaster
-      position="bottom-right"
+      position="top-center"
+      richColors
       duration={4000}
       gap={8}
       toastOptions={{

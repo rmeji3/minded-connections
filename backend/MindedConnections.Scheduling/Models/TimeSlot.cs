@@ -32,5 +32,5 @@ public class TimeSlot
 
     public Availability Availability { get; set; } = default!;
 
-    public Appointment? Appointment { get; set; }
+    public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
 }

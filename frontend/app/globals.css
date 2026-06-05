@@ -340,3 +340,35 @@ address{font-style:normal;font-size:0.9rem;line-height:1.8;color:var(--sage-100)
 .time-slot-btn:not(:disabled):not([aria-pressed="true"]):hover{border-color:var(--sage-400);background:var(--sage-50,#f0f4f1)}
 
 
+
+/* Radix Dropdown Menu */
+.radix-dropdown-content {
+  z-index: 50;
+  min-width: 8rem;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 4px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+.radix-dropdown-item {
+  padding: 8px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 2px;
+}
+.radix-dropdown-item:hover {
+  background-color: #f0f0f0;
+}
+.radix-dropdown-item-destructive {
+  color: red;
+}
+.radix-dropdown-item-destructive:hover {
+  background-color: #fee;
+}
+.radix-dropdown-separator {
+  height: 1px;
+  background-color: #eee;
+  margin: 4px 0;
+}
+

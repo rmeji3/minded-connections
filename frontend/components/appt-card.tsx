@@ -1,12 +1,21 @@
 import { BadgeChip } from "@/components/ui/badge-chip";
 import { GhostBtn } from "@/components/ui/ghost-btn";
 import type { Appointment } from "@/lib/appointments-types";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 
 interface ApptCardProps {
   appt: Appointment;
+  onEdit?: (appt: Appointment) => void;
+  onCancel?: (appt: Appointment) => void;
 }
 
-export function ApptCard({ appt }: ApptCardProps) {
+export function ApptCard({ appt, onEdit, onCancel }: ApptCardProps) {
   return (
     <article className="bg-[var(--warm-white)] border border-[var(--linen)] rounded-[10px] px-4 py-4 sm:px-5 sm:py-[1.125rem] transition-shadow hover:shadow-[0_2px_12px_rgba(39,35,32,.06)]">
       <div className="flex gap-3 sm:gap-5 flex-col sm:flex-row sm:items-start">
@@ -71,52 +80,95 @@ export function ApptCard({ appt }: ApptCardProps) {
           {/* Mobile actions */}
           <div className="sm:hidden flex flex-wrap gap-2">
             {appt.primaryAction === "join" ? (
-              <button
+              <a
+                href={appt.meetingUrl ?? "#"}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-disabled={!appt.meetingUrl}
                 style={{
                   display: "inline-flex", alignItems: "center", justifyContent: "center",
                   padding: "0.4rem 0.875rem", border: "1.5px solid var(--sage-700)", borderRadius: 4,
-                  background: "var(--sage-700)", color: "white", fontSize: "0.75rem",
-                  fontFamily: "var(--font-body)", cursor: "pointer", letterSpacing: "0.06em",
-                  whiteSpace: "nowrap", minWidth: 88,
+                  background: appt.meetingUrl ? "var(--sage-700)" : "var(--stone-200)",
+                  color: appt.meetingUrl ? "white" : "var(--stone-400)",
+                  fontSize: "0.75rem", fontFamily: "var(--font-body)", letterSpacing: "0.06em",
+                  whiteSpace: "nowrap", minWidth: 88, textDecoration: "none",
+                  pointerEvents: appt.meetingUrl ? "auto" : "none",
+                  borderColor: appt.meetingUrl ? "var(--sage-700)" : "var(--stone-200)",
                 }}
               >
                 JOIN
-              </button>
+              </a>
             ) : (
               <GhostBtn small>VIEW DETAILS</GhostBtn>
             )}
-            <GhostBtn small>RESCHEDULE</GhostBtn>
+            {onEdit && (
+              <GhostBtn small onClick={() => onEdit(appt)}>EDIT / RESCHEDULE</GhostBtn>
+            )}
           </div>
         </div>
 
         {/* Desktop actions */}
         <div className="sm:flex hidden flex-row items-center gap-2 flex-shrink-0">
           {appt.primaryAction === "join" ? (
-            <button
+            <a
+              href={appt.meetingUrl ?? "#"}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-disabled={!appt.meetingUrl}
               style={{
                 display: "inline-flex", alignItems: "center", justifyContent: "center",
                 padding: "0.4rem 0.875rem", border: "1.5px solid var(--sage-700)", borderRadius: 4,
-                background: "var(--sage-700)", color: "white", fontSize: "0.75rem",
-                fontFamily: "var(--font-body)", cursor: "pointer", letterSpacing: "0.06em",
-                whiteSpace: "nowrap", minWidth: 88,
+                background: appt.meetingUrl ? "var(--sage-700)" : "var(--stone-200)",
+                color: appt.meetingUrl ? "white" : "var(--stone-400)",
+                fontSize: "0.75rem", fontFamily: "var(--font-body)", letterSpacing: "0.06em",
+                whiteSpace: "nowrap", minWidth: 88, textDecoration: "none",
+                pointerEvents: appt.meetingUrl ? "auto" : "none",
+                borderColor: appt.meetingUrl ? "var(--sage-700)" : "var(--stone-200)",
               }}
             >
               JOIN
-            </button>
+            </a>
           ) : (
             <GhostBtn small>VIEW DETAILS</GhostBtn>
           )}
-          <GhostBtn small>RESCHEDULE</GhostBtn>
-          <button
-            aria-label="More options"
-            style={{
-              width: 32, height: 32, borderRadius: 5, border: "none",
-              background: "transparent", color: "var(--stone-400)", cursor: "pointer",
-              display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "1.1rem",
-            }}
-          >
-            ⋮
-          </button>
+          {onEdit && (
+            <GhostBtn small onClick={() => onEdit(appt)}>EDIT / RESCHEDULE</GhostBtn>
+          )}
+          {(onEdit || onCancel) && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  aria-label="More options"
+                  style={{
+                    width: 32, height: 32, borderRadius: 5, border: "none",
+                    background: "transparent", color: "var(--stone-400)", cursor: "pointer",
+                    display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "1.1rem",
+                  }}
+                >
+                  ⋮
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {appt.primaryAction === "join" && (
+                  <DropdownMenuItem
+                    onClick={() => appt.meetingUrl && window.open(appt.meetingUrl, "_blank", "noopener,noreferrer")}
+                    style={{ opacity: appt.meetingUrl ? 1 : 0.4, cursor: appt.meetingUrl ? "pointer" : "default" }}
+                  >
+                    Join Visit
+                  </DropdownMenuItem>
+                )}
+                {onEdit && (
+                  <DropdownMenuItem onClick={() => onEdit(appt)}>Edit / Reschedule</DropdownMenuItem>
+                )}
+                {onCancel && (
+                  <>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem destructive onClick={() => onCancel(appt)}>Cancel Appointment</DropdownMenuItem>
+                  </>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
       </div>
     </article>

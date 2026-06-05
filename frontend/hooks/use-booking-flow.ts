@@ -2,33 +2,34 @@
 
 import { useState } from "react";
 import type { Step, VisitMode } from "@/lib/appointments-types";
+import { SlotDto } from "@/lib/scheduling-api";
 
 const DOW_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-// May 2026: May 1 = Friday (index 5)
-function getDateLabel(day: number): string {
-  const dayOfWeek = (5 + day - 1) % 7;
-  return `${DOW_NAMES[dayOfWeek]}, ${MONTH_NAMES[4]} ${day}`;
+export function getDateLabel(date: Date): string {
+  return `${DOW_NAMES[date.getDay()]}, ${MONTH_NAMES[date.getMonth()]} ${date.getDate()}`;
 }
 
 export function useBookingFlow() {
   const [step, setStep] = useState<Step>(1);
   const [visitType, setVisitType] = useState<string | null>(null);
   const [visitMode, setVisitMode] = useState<VisitMode>("telehealth");
-  const [selectedDate, setSelectedDate] = useState<number | null>(19);
-  const [selectedTime, setSelectedTime] = useState<string | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedSlot, setSelectedSlot] = useState<SlotDto | null>(null);
   const [notes, setNotes] = useState("");
   const [confirmed, setConfirmed] = useState(false);
+  const [rescheduleApptId, setRescheduleApptId] = useState<string | null>(null);
 
   const reset = () => {
     setStep(1);
     setVisitType(null);
     setVisitMode("telehealth");
-    setSelectedDate(19);
-    setSelectedTime(null);
+    setSelectedDate(null);
+    setSelectedSlot(null);
     setNotes("");
     setConfirmed(false);
+    setRescheduleApptId(null);
   };
 
   return {
@@ -36,9 +37,10 @@ export function useBookingFlow() {
     visitType, setVisitType,
     visitMode, setVisitMode,
     selectedDate, setSelectedDate,
-    selectedTime, setSelectedTime,
+    selectedSlot, setSelectedSlot,
     notes, setNotes,
     confirmed, setConfirmed,
+    rescheduleApptId, setRescheduleApptId,
     reset,
     getDateLabel,
   };

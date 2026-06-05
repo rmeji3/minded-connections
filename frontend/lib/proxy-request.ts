@@ -11,6 +11,7 @@ const API_URL = process.env.API_URL ?? "http://localhost:5050";
 
 interface ProxyOptions {
   upstreamPath?: string;
+  apiUrl?: string;
 }
 
 export async function proxyToBackend(
@@ -18,6 +19,7 @@ export async function proxyToBackend(
   method: string,
   options: ProxyOptions = {},
 ): Promise<NextResponse> {
+  const targetApiUrl = options.apiUrl ?? API_URL;
   const upstreamPath =
     options.upstreamPath ?? req.nextUrl.pathname.replace(/^\/api/, "");
 
@@ -33,12 +35,16 @@ export async function proxyToBackend(
     forwardHeaders["Authorization"] = `Bearer ${session.access_token}`;
   }
 
+  if (process.env.TENANT_API_KEY) {
+    forwardHeaders["X-Api-Key"] = process.env.TENANT_API_KEY;
+  }
+
   let body: string | undefined;
   if (method !== "GET" && method !== "HEAD") {
     body = await req.text();
   }
 
-  const upstream = await fetch(`${API_URL}${upstreamPath}`, {
+  const upstream = await fetch(`${targetApiUrl}${upstreamPath}`, {
     method,
     headers: forwardHeaders,
     body: body || undefined,

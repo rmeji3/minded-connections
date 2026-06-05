@@ -40,8 +40,13 @@ namespace MindedConnections.Scheduling.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
 
-                    b.Property<string>("Notes")
+                    b.Property<string>("MeetingUrl")
                         .HasColumnType("text")
+                        .HasColumnName("meeting_url");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)")
                         .HasColumnName("notes");
 
                     b.Property<string>("PatientId")
@@ -53,6 +58,14 @@ namespace MindedConnections.Scheduling.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("provider_id");
+
+                    b.Property<string>("RecurrenceGroupId")
+                        .HasColumnType("text")
+                        .HasColumnName("recurrence_group_id");
+
+                    b.Property<int>("RescheduleCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("reschedule_count");
 
                     b.Property<int>("Status")
                         .HasColumnType("integer")
@@ -68,16 +81,91 @@ namespace MindedConnections.Scheduling.Migrations
                         .HasColumnType("text")
                         .HasColumnName("time_slot_id");
 
+                    b.Property<string>("VisitMode")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("visit_mode");
+
+                    b.Property<string>("VisitType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("visit_type");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("RecurrenceGroupId")
+                        .HasFilter("recurrence_group_id IS NOT NULL");
+
                     b.HasIndex("TimeSlotId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("ix_appointments_time_slot_scheduled_unique")
+                        .HasFilter("status = 0");
 
                     b.HasIndex("TenantId", "PatientId");
 
                     b.HasIndex("TenantId", "ProviderId", "Status");
 
                     b.ToTable("appointments");
+                });
+
+            modelBuilder.Entity("MindedConnections.Scheduling.Models.AuditLog", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("action");
+
+                    b.Property<string>("ActorId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("actor_id");
+
+                    b.Property<string>("ActorRole")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("actor_role");
+
+                    b.Property<string>("EntityId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("entity_id");
+
+                    b.Property<string>("EntityType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("entity_type");
+
+                    b.Property<string>("Metadata")
+                        .HasColumnType("text")
+                        .HasColumnName("metadata");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("tenant_id");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("timestamp");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId", "ActorId");
+
+                    b.HasIndex("TenantId", "EntityId");
+
+                    b.HasIndex("TenantId", "Timestamp");
+
+                    b.ToTable("audit_logs");
                 });
 
             modelBuilder.Entity("MindedConnections.Scheduling.Models.Availability", b =>
@@ -130,6 +218,184 @@ namespace MindedConnections.Scheduling.Migrations
                         .IsUnique();
 
                     b.ToTable("availabilities");
+                });
+
+            modelBuilder.Entity("MindedConnections.Scheduling.Models.BlockedSlot", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateTime>("EndsAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("ends_at");
+
+                    b.Property<string>("ProviderId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("provider_id");
+
+                    b.Property<string>("Reason")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("reason");
+
+                    b.Property<DateTime>("StartsAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("starts_at");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("tenant_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId", "ProviderId", "StartsAt", "EndsAt");
+
+                    b.ToTable("blocked_slots");
+                });
+
+            modelBuilder.Entity("MindedConnections.Scheduling.Models.CareRelationship", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_active");
+
+                    b.Property<string>("PatientId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("patient_id");
+
+                    b.Property<string>("ProviderId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("provider_id");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("tenant_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId", "PatientId", "IsActive");
+
+                    b.HasIndex("TenantId", "PatientId", "ProviderId")
+                        .IsUnique();
+
+                    b.HasIndex("TenantId", "ProviderId", "IsActive");
+
+                    b.ToTable("care_relationships");
+                });
+
+            modelBuilder.Entity("MindedConnections.Scheduling.Models.NotificationOutbox", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text")
+                        .HasColumnName("id");
+
+                    b.Property<string>("AppointmentId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("appointment_id");
+
+                    b.Property<string>("LastError")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)")
+                        .HasColumnName("last_error");
+
+                    b.Property<string>("PayloadJson")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("payload_json");
+
+                    b.Property<string>("RecipientUserId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("recipient_user_id");
+
+                    b.Property<int>("Retries")
+                        .HasColumnType("integer")
+                        .HasColumnName("retries");
+
+                    b.Property<DateTime>("ScheduledAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("scheduled_at");
+
+                    b.Property<DateTime?>("SentAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("sent_at");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("tenant_id");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer")
+                        .HasColumnName("type");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppointmentId");
+
+                    b.HasIndex("ScheduledAt", "SentAt")
+                        .HasDatabaseName("ix_notification_outbox_pending");
+
+                    b.ToTable("notification_outbox");
+                });
+
+            modelBuilder.Entity("MindedConnections.Scheduling.Models.ServiceType", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<int>("DurationMin")
+                        .HasColumnType("integer")
+                        .HasColumnName("duration_min");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_active");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("name");
+
+                    b.Property<decimal?>("Price")
+                        .HasColumnType("numeric(10,2)")
+                        .HasColumnName("price");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("tenant_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId", "Name");
+
+                    b.ToTable("service_types");
                 });
 
             modelBuilder.Entity("MindedConnections.Scheduling.Models.Tenant", b =>
@@ -209,7 +475,8 @@ namespace MindedConnections.Scheduling.Migrations
 
                     b.HasIndex("AvailabilityId");
 
-                    b.HasIndex("TenantId", "ProviderId", "StartsAt");
+                    b.HasIndex("TenantId", "ProviderId", "StartsAt")
+                        .IsUnique();
 
                     b.ToTable("time_slots");
                 });
@@ -217,8 +484,8 @@ namespace MindedConnections.Scheduling.Migrations
             modelBuilder.Entity("MindedConnections.Scheduling.Models.Appointment", b =>
                 {
                     b.HasOne("MindedConnections.Scheduling.Models.TimeSlot", "TimeSlot")
-                        .WithOne("Appointment")
-                        .HasForeignKey("MindedConnections.Scheduling.Models.Appointment", "TimeSlotId")
+                        .WithMany("Appointments")
+                        .HasForeignKey("TimeSlotId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -243,7 +510,7 @@ namespace MindedConnections.Scheduling.Migrations
 
             modelBuilder.Entity("MindedConnections.Scheduling.Models.TimeSlot", b =>
                 {
-                    b.Navigation("Appointment");
+                    b.Navigation("Appointments");
                 });
 #pragma warning restore 612, 618
         }

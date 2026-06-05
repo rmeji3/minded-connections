@@ -40,4 +40,18 @@ public class TenantsController(ITenantService tenants) : ControllerBase
         var found = await tenants.DeactivateAsync(tenantId);
         return found ? NoContent() : NotFound();
     }
+
+    [HttpPost("{tenantId}/rotate-key")]
+    [ProducesResponseType<CreateTenantResponse>(200)]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> RotateKey(string tenantId)
+    {
+        try
+        {
+            var result = await tenants.RotateApiKeyAsync(tenantId);
+            return Ok(result);
+        }
+        catch (MindedConnections.Shared.Exceptions.NotFoundException ex)
+        { return NotFound(new { error = ex.Message }); }
+    }
 }

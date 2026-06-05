@@ -29,7 +29,7 @@ dotnet run
 # 4. (Optional) Run the scheduling service in a second terminal
 cd ../MindedConnections.Scheduling
 dotnet run
-# → http://localhost:5051
+# → http://localhost:5020
 ```
 
 ## Required: `appsettings.Development.json`

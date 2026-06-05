@@ -194,17 +194,12 @@ function LoginForm() {
   );
 }
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
-
-export default function LoginPage() {
+function LoginRedirect() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { user, isLoading } = useAuth();
   const hasRedirected = React.useRef(false);
 
-  // Redirect once the user is authenticated. The ref guard ensures we navigate
-  // exactly once — without it, re-renders re-fire router.push every frame and
-  // each call preempts the in-flight navigation, so the target route never loads.
   React.useEffect(() => {
     if (isLoading || !user || hasRedirected.current) return;
     hasRedirected.current = true;
@@ -212,8 +207,15 @@ export default function LoginPage() {
     router.replace(next || ROLE_REDIRECT[user.role]);
   }, [user, isLoading, router, searchParams]);
 
+  return null;
+}
+
+export default function LoginPage() {
   return (
     <main className="min-h-screen lg:grid lg:grid-cols-[45fr_55fr]">
+      <React.Suspense>
+        <LoginRedirect />
+      </React.Suspense>
       <LeftPanel />
 
       {/* ── Right panel ── */}

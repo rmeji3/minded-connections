@@ -57,7 +57,7 @@ export default function AppointmentsPage() {
             </div>
             <div className="sm:flex-shrink-0 w-full sm:w-auto">
               <button className="btn-primary w-full sm:w-auto" onClick={openBooking}>
-                + Book a visit
+                + Book an appointment
               </button>
             </div>
           </div>
