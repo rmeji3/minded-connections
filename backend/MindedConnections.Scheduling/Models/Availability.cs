@@ -10,6 +10,9 @@ public class Availability
     [Column("id")]
     public string Id { get; set; } = Guid.NewGuid().ToString();
 
+    [Column("tenant_id")]
+    public string TenantId { get; set; } = default!;
+
     /// <summary>References ApplicationUser.Id from the main API.</summary>
     [Column("provider_id")]
     public string ProviderId { get; set; } = default!;
@@ -25,6 +28,12 @@ public class Availability
 
     [Column("slot_duration_min")]
     public int SlotDurationMin { get; set; } = 30;
+
+    [Column("buffer_time_min")]
+    public int BufferTimeMin { get; set; } = 0;
+
+    [Column("max_advance_booking_days")]
+    public int MaxAdvanceBookingDays { get; set; } = 60;
 
     [Column("is_active")]
     public bool IsActive { get; set; } = true;

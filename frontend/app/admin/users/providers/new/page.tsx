@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useCreateProvider } from "@/hooks/use-users";
 import { FormField } from "@/components/admin/form-field";
+import { PasswordInput } from "@/components/ui/password-input";
 import { ApiError } from "@/lib/api-client";
 import { parseIdentityErrors } from "@/lib/identity-errors";
 
@@ -136,7 +137,7 @@ export default function NewProviderPage() {
         </FormField>
 
         <FormField id="password" label="Temporary password" required error={errors.password} hint="Min 10 chars · must include uppercase, lowercase, number, and symbol (e.g. !@#$).">
-          <input type="password" value={fields.password} onChange={set("password")} autoComplete="new-password" />
+          <PasswordInput value={fields.password} onChange={set("password")} autoComplete="new-password" />
         </FormField>
 
         <FormField id="title" label="Title" required error={errors.title} hint='e.g. "Licensed Educational Psychologist"'>

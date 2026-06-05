@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MindedConnections.Api.Data;
-using MindedConnections.Shared.Exceptions;
 using MindedConnections.Api.Models;
+using MindedConnections.Api.Services.Supabase;
 using MindedConnections.Shared.Constants;
 using MindedConnections.Shared.Dtos;
 using MindedConnections.Shared.Dtos.Users;
+using MindedConnections.Shared.Exceptions;
 using MindedConnections.Shared.Queries;
 
 namespace MindedConnections.Api.Services.Users;
@@ -13,6 +14,7 @@ namespace MindedConnections.Api.Services.Users;
 public sealed class UsersService(
     UserManager<ApplicationUser> userManager,
     AppDbContext                 db,
+    ISupabaseAdminService        supabase,
     ILogger<UsersService>        logger) : IUsersService
 {
     // ─────────────────────────────────────────────────────────────────────────
@@ -65,7 +67,6 @@ public sealed class UsersService(
         }
 
         var total = await q.CountAsync();
-
         var items = await q
             .OrderBy(x => x.User.CreatedAt)
             .Skip(query.Skip)
@@ -95,8 +96,19 @@ public sealed class UsersService(
 
     public async Task<UserDto> CreateProviderAsync(CreateProviderRequest req)
     {
+        // Prevent EF tracking conflict if user already exists in local DB.
+        var existingUser = await userManager.FindByEmailAsync(req.Email);
+        if (existingUser is not null)
+        {
+            throw new ValidationException([$"Email '{req.Email}' is already registered."]);
+        }
+
+        // Supabase is the source of truth for auth — create there first.
+        var supabaseId = await supabase.CreateUserAsync(req.Email, req.Password, Roles.Provider);
+
         var user = new ApplicationUser
         {
+            Id             = supabaseId,    // keep our DB in sync with Supabase UUID
             UserName       = req.Email,
             Email          = req.Email,
             EmailConfirmed = true,
@@ -106,16 +118,18 @@ public sealed class UsersService(
             Timezone       = req.Timezone ?? "America/Los_Angeles",
         };
 
-        var result = await userManager.CreateAsync(user, req.Password);
+        var result = await userManager.CreateAsync(user);
         if (!result.Succeeded)
         {
-            logger.LogWarning("Failed to create provider {Email}: {Errors}",
+            logger.LogWarning("Failed to create provider profile {Email}: {Errors}",
                 req.Email, string.Join("; ", result.Errors.Select(e => e.Description)));
+
+            // Supabase user was created — roll it back so we don't leave a ghost account.
+            await supabase.DeleteUserAsync(supabaseId);
             throw new ValidationException(result.Errors.Select(e => e.Description));
         }
 
         await userManager.AddToRoleAsync(user, Roles.Provider);
-        logger.LogInformation("Provider account created: {UserId} ({Email})", user.Id, user.Email);
 
         db.ProviderProfiles.Add(new ProviderProfile
         {
@@ -127,6 +141,7 @@ public sealed class UsersService(
 
         await db.SaveChangesAsync();
 
+        logger.LogInformation("Provider created: {UserId} ({Email})", user.Id, user.Email);
         return ToDto(user, Roles.Provider);
     }
 
@@ -136,8 +151,18 @@ public sealed class UsersService(
 
     public async Task<UserDto> CreatePatientAsync(CreatePatientRequest req)
     {
+        // Prevent EF tracking conflict if user already exists in local DB.
+        var existingUser = await userManager.FindByEmailAsync(req.Email);
+        if (existingUser is not null)
+        {
+            throw new ValidationException([$"Email '{req.Email}' is already registered."]);
+        }
+
+        var supabaseId = await supabase.CreateUserAsync(req.Email, req.Password, Roles.Patient);
+
         var user = new ApplicationUser
         {
+            Id             = supabaseId,
             UserName       = req.Email,
             Email          = req.Email,
             EmailConfirmed = true,
@@ -147,17 +172,19 @@ public sealed class UsersService(
             Timezone       = req.Timezone ?? "America/Los_Angeles",
         };
 
-        var result = await userManager.CreateAsync(user, req.Password);
+        var result = await userManager.CreateAsync(user);
         if (!result.Succeeded)
         {
-            logger.LogWarning("Failed to create patient {Email}: {Errors}",
+            logger.LogWarning("Failed to create patient profile {Email}: {Errors}",
                 req.Email, string.Join("; ", result.Errors.Select(e => e.Description)));
+
+            await supabase.DeleteUserAsync(supabaseId);
             throw new ValidationException(result.Errors.Select(e => e.Description));
         }
 
         await userManager.AddToRoleAsync(user, Roles.Patient);
-        logger.LogInformation("Patient account created: {UserId} ({Email})", user.Id, user.Email);
 
+        logger.LogInformation("Patient created: {UserId} ({Email})", user.Id, user.Email);
         return ToDto(user, Roles.Patient);
     }
 
@@ -170,10 +197,13 @@ public sealed class UsersService(
         var user = await userManager.FindByIdAsync(id)
             ?? throw new KeyNotFoundException($"User '{id}' not found.");
 
+        // Delete from Supabase first (best-effort — log but don't block on failure).
+        await supabase.DeleteUserAsync(id);
+
         var result = await userManager.DeleteAsync(user);
         if (!result.Succeeded)
         {
-            logger.LogWarning("Failed to delete user {UserId}: {Errors}",
+            logger.LogWarning("Failed to delete user {UserId} from local DB: {Errors}",
                 id, string.Join("; ", result.Errors.Select(e => e.Description)));
             throw new ValidationException(result.Errors.Select(e => e.Description));
         }

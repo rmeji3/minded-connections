@@ -4,7 +4,7 @@ import * as React from "react";
 import {
   loginRequest,
   logoutRequest,
-  refreshSession,
+  getMeRequest,
   type AuthUser,
   type LoginCredentials,
 } from "@/lib/auth-api";
@@ -15,7 +15,7 @@ interface AuthContextValue {
   user: AuthUser | null;
   isLoading: boolean;
   isAuthenticated: boolean;
-  login: (credentials: LoginCredentials) => Promise<AuthUser>;
+  login: (credentials: LoginCredentials) => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -28,26 +28,26 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [user, setUser] = React.useState<AuthUser | null>(null);
+  const [user, setUser]           = React.useState<AuthUser | null>(null);
   const [isLoading, setIsLoading] = React.useState(true);
 
-  // Attempt silent restore from refresh-token cookie on first mount
+  // Restore the session on mount by asking the server who we are. The HttpOnly
+  // cookie is sent automatically; if it's missing or invalid, /me returns 401.
   React.useEffect(() => {
-    refreshSession()
-      .then((restored) => setUser(restored))
+    getMeRequest()
+      .then(setUser)
+      .catch(() => setUser(null))
       .finally(() => setIsLoading(false));
   }, []);
 
   const login = React.useCallback(async (credentials: LoginCredentials) => {
-    const data = await loginRequest(credentials);
-    setUser(data.user);
-    return data.user;
+    await loginRequest(credentials);
+    const profile = await getMeRequest();
+    setUser(profile);
   }, []);
 
   const logout = React.useCallback(async () => {
-    await logoutRequest().catch(() => {
-      // Best effort — clear local state regardless
-    });
+    await logoutRequest();
     setUser(null);
   }, []);
 

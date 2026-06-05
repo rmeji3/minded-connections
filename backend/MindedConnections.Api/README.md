@@ -6,7 +6,7 @@ Core REST API. Handles authentication, user management, and admin operations.
 
 | Prefix | Controller | Auth required |
 |---|---|---|
-| `/auth` | `AuthController` | Public (login, refresh) / Bearer (logout, me) |
+| `/auth` | `AuthController` | Bearer (me) |
 | `/users` | `UsersController` | Bearer + Admin role |
 
 ## Directory map
@@ -14,10 +14,10 @@ Core REST API. Handles authentication, user management, and admin operations.
 | Directory | Purpose |
 |---|---|
 | `Controllers/` | Thin controllers — HTTP routing and exception-to-status mapping only |
-| `Services/Auth/` | `IAuthService` / `AuthService` — login, logout, token refresh, user info |
+| `Services/Auth/` | `IAuthService` / `AuthService` — user info (profile retrieval) |
 | `Services/Users/` | `IUsersService` / `UsersService` — CRUD, pagination, stats |
-| `Services/Jwt/` | `IJwtService` / `JwtService` — access token generation, refresh token creation |
-| `Models/` | EF entity classes (`ApplicationUser`, `RefreshToken`, `ProviderProfile`) |
+| `Services/Supabase/` | `ISupabaseAdminService` / `SupabaseAdminService` — Supabase Admin API client (used to manage users/seed admin) |
+| `Models/` | EF entity classes (`ApplicationUser`, `ProviderProfile`) |
 | `Data/` | `AppDbContext` — EF Core DbContext and seed logic |
 | `Migrations/` | EF Core migrations (committed to source control) |
 | `logs/` | Serilog rolling log files (gitignored) |
@@ -30,9 +30,9 @@ Core REST API. Handles authentication, user management, and admin operations.
 
 ## Auth design
 
-- JWT Bearer (HMAC-SHA256). Access tokens: 15 min. Refresh tokens: 7 days, rotate on every use.
-- Refresh tokens stored in the `RefreshTokens` table, revoked on logout and password change.
-- Tokens issued as HttpOnly cookies by the Next.js Route Handler proxy — the API itself returns them in the response body.
+- **Supabase Authentication**: The API validates JWTs issued by Supabase using JWKS (JSON Web Key Sets) provided by the Supabase authority.
+- **Claims Transformation**: A custom `SupabaseClaimsTransformation` parses the user's role from the JWT (`app_metadata.role`) and maps it to ASP.NET Core `ClaimTypes.Role` for compatibility with `[Authorize(Roles = "...")]` attributes.
+- **Database Identity**: Refresh tokens and passwords are not stored locally. Users are seeded or managed via the `SupabaseAdminService` first to establish a canonical UUID, which is then written to the local PostgreSQL database for relational mapping.
 
 ## Running
 

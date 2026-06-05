@@ -11,7 +11,7 @@ Next.js 16 application — patient portal, provider portal, admin dashboard, and
 | Styling | Tailwind CSS v4 + CSS design tokens (`globals.css`) |
 | Data fetching | TanStack Query v5 |
 | Notifications | Sonner |
-| Auth | JWT access + refresh tokens via Route Handler proxy |
+| Auth | Supabase Auth with server-side HttpOnly cookies via `@supabase/ssr` |
 
 ## Running locally
 
@@ -24,6 +24,8 @@ npm run dev    # http://localhost:3000
 ```
 NEXT_PUBLIC_API_URL=/api
 API_URL=http://localhost:5050
+NEXT_PUBLIC_SUPABASE_URL=your-supabase-project-url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
 ```
 
 ## Directory map
@@ -31,20 +33,19 @@ API_URL=http://localhost:5050
 | Directory | README | Purpose |
 |---|---|---|
 | `app/` | [→](app/README.md) | All routes — pages, layouts, Route Handlers |
-| `app/api/` | [→](app/api/README.md) | Backend proxy Route Handlers |
+| `app/api/` | [→](app/api/README.md) | Backend proxy Route Handlers (login/logout handled via Supabase SDK client) |
 | `app/admin/` | [→](app/admin/README.md) | Admin dashboard (role-gated) |
 | `app/portal/` | [→](app/portal/README.md) | Patient + provider portals |
 | `components/` | [→](components/README.md) | All reusable UI components |
 | `contexts/` | [→](contexts/README.md) | React context providers |
 | `hooks/` | [→](hooks/README.md) | TanStack Query data hooks |
-| `lib/` | [→](lib/README.md) | API client, typed API functions, utilities |
+| `lib/` | [→](lib/README.md) | API client, typed API functions, utilities, and Supabase server helper |
 
 ## Auth flow summary
 
-1. `POST /api/auth/login` — Next.js Route Handler proxies to backend, re-issues `Set-Cookie` on the Next.js domain.
-2. `has_session=1` sentinel cookie (non-HttpOnly) lets the client skip the refresh call when no session exists.
-3. `middleware.ts` guards protected routes by checking for the `refresh_token` cookie.
-4. Access tokens (15 min) are stored in module memory; refresh tokens (7 days) are HttpOnly cookies.
+1. **Authentication**: `POST /api/auth/login` uses `@supabase/ssr` server client to authenticate the user and stores the session securely in HttpOnly cookies on the Next.js origin (XSS-resistant).
+2. **Session Persistence & Gating**: Next.js middleware (`proxy.ts`) intercepts requests, validates/refreshes the Supabase token using `getUser()`, and redirects unauthenticated users trying to access protected paths like `/admin` or `/portal`.
+3. **API Proxy**: Backend API requests go through `proxyToBackend` in `frontend/lib/proxy-request.ts`. The proxy reads the active access token from the secure cookies and forwards it as a `Bearer` token to the .NET API. The browser client never handles the raw JWT token.
 
 ## Standards
 

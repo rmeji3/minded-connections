@@ -51,17 +51,12 @@ This file is gitignored — you must create it manually in **each** API project 
   "ConnectionStrings": {
     "Default": "Host=localhost;Port=5432;Database=minded;Username=postgres;Password=postgres"
   },
-  "Jwt": {
-    "Secret": "minded-connections-dev-secret-key-2026!!",
-    "Issuer": "minded-connections-api",
-    "Audience": "minded-connections-clients"
+  "Supabase": {
+    "ServiceRoleKey": "your-supabase-service-role-key-here"
   },
   "Seed": {
     "AdminEmail": "you@example.com",
     "AdminPassword": "Password1!"
-  },
-  "Cookie": {
-    "Secure": false
   }
 }
 ```
@@ -70,7 +65,7 @@ This file is gitignored — you must create it manually in **each** API project 
 ```json
 {
   "ConnectionStrings": {
-    "Default": "Host=localhost;Port=5432;Database=minded;Username=postgres;Password=postgres"
+    "Scheduling": "Host=localhost;Port=5432;Database=minded;Username=postgres;Password=postgres"
   }
 }
 ```

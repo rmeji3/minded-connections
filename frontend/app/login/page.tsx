@@ -5,8 +5,9 @@ import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { useLogin } from "@/hooks/use-login";
+import { useAuth } from "@/hooks/use-auth";
 import { ApiError } from "@/lib/api-client";
-import type { UserRole } from "@/lib/auth-api";
+import type { UserRole } from "@/lib/auth-api"; // used in ROLE_REDIRECT
 
 // ─── Role → destination ───────────────────────────────────────────────────────
 
@@ -73,11 +74,7 @@ function LeftPanel() {
 
 // ─────────────────────────────────────────────────────────────────────────────
 
-interface LoginFormProps {
-  onSuccess: (role: UserRole) => void;
-}
-
-function LoginForm({ onSuccess }: LoginFormProps) {
+function LoginForm() {
   const [showPw, setShowPw] = React.useState(false);
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -89,7 +86,6 @@ function LoginForm({ onSuccess }: LoginFormProps) {
     login(
       { email, password },
       {
-        onSuccess: (user) => onSuccess(user.role),
         onError: (err) => {
           const message = err instanceof ApiError ? err.message : "Something went wrong. Please try again.";
           toast.error("Sign-in failed", { description: message });
@@ -203,15 +199,18 @@ function LoginForm({ onSuccess }: LoginFormProps) {
 export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { user, isLoading } = useAuth();
+  const hasRedirected = React.useRef(false);
 
-  const handleSuccess = (role: UserRole) => {
+  // Redirect once the user is authenticated. The ref guard ensures we navigate
+  // exactly once — without it, re-renders re-fire router.push every frame and
+  // each call preempts the in-flight navigation, so the target route never loads.
+  React.useEffect(() => {
+    if (isLoading || !user || hasRedirected.current) return;
+    hasRedirected.current = true;
     const next = searchParams.get("next");
-    if (next) {
-      router.push(next);
-      return;
-    }
-    router.push(ROLE_REDIRECT[role]);
-  };
+    router.replace(next || ROLE_REDIRECT[user.role]);
+  }, [user, isLoading, router, searchParams]);
 
   return (
     <main className="min-h-screen lg:grid lg:grid-cols-[45fr_55fr]">
@@ -243,7 +242,7 @@ export default function LoginPage() {
               Use the email address you provided during intake.
             </p>
 
-            <LoginForm onSuccess={handleSuccess} />
+            <LoginForm />
 
             <p style={{ marginTop: "1.75rem", fontSize: "0.8125rem", color: "var(--stone-500)", lineHeight: 1.7, maxWidth: "none", marginBottom: 0 }}>
               Trouble accessing your account? Email{" "}

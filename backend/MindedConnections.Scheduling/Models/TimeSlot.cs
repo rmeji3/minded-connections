@@ -12,15 +12,14 @@ public class TimeSlot
     [Column("id")]
     public string Id { get; set; } = Guid.NewGuid().ToString();
 
+    [Column("tenant_id")]
+    public string TenantId { get; set; } = default!;
+
     [Column("availability_id")]
     public string AvailabilityId { get; set; } = default!;
 
     [Column("provider_id")]
     public string ProviderId { get; set; } = default!;
-
-    /// <summary>Set when the slot is booked — references Appointment.Id in the main API.</summary>
-    [Column("appointment_id")]
-    public string? AppointmentId { get; set; }
 
     [Column("starts_at")]
     public DateTime StartsAt { get; set; }
@@ -32,4 +31,6 @@ public class TimeSlot
     public SlotStatus Status { get; set; } = SlotStatus.Available;
 
     public Availability Availability { get; set; } = default!;
+
+    public Appointment? Appointment { get; set; }
 }

@@ -4,30 +4,33 @@ Scheduling microservice. Manages provider availability, appointment slots, and b
 
 ## Status
 
-🚧 In progress — controllers and models scaffolded; service layer and EF migrations pending.
+✅ Fully implemented — database migrations, controllers, models, and domain services in place.
 
-## Planned endpoints
+## Endpoints
 
-| Prefix | Purpose |
-|---|---|
-| `/availability` | Provider availability windows (CRUD) |
-| `/slots` | Generated bookable time slots |
-| `/appointments` | Appointment booking and management |
+| Prefix | Purpose | Auth required |
+|---|---|---|
+| `/tenants` | Tenant account registration and lookup | API Key |
+| `/availability` | Provider availability windows (CRUD) | Bearer (Supabase JWT) + API Key |
+| `/slots` | Generated bookable time slots | Bearer (Supabase JWT) + API Key |
+| `/appointments` | Appointment booking and management | Bearer (Supabase JWT) + API Key |
 
 ## Directory map
 
 | Directory | Purpose |
 |---|---|
 | `Controllers/` | Thin controllers — routing and exception mapping only |
-| `Models/` | EF entity classes (`Appointment`, `AppointmentType`) |
+| `Models/` | EF entity classes (`Tenant`, `Appointment`, `Availability`, `TimeSlot`) |
 | `Data/` | `SchedulingDbContext` |
-| `Services/` | Service interfaces and implementations (to be created) |
+| `Services/` | Scoped services matching domain areas (Appointments, Availability, Slots, Tenants) |
+| `Middleware/` | `TenantMiddleware` (tenant context population) and `SupabaseClaimsTransformation` |
+| `Dtos/` | Typed request/response objects for all endpoints |
 
-## Architecture
+## Architecture & Multi-Tenancy
 
-Follows the same fat service / thin controller pattern as `MindedConnections.Api`. See `STANDARDS.md §12`.
-
-Each domain area gets its own `Services/<Domain>/` subfolder with an interface + implementation pair.
+- **Fat service / thin controller** — all business logic lives in services. See `STANDARDS.md §12`.
+- **Multi-Tenancy**: The microservice is multi-tenant. All non-health requests must supply an `X-Api-Key` header. `TenantMiddleware` validates this key against hashed tenant keys in the database and populates a scoped `TenantContext` containing the resolved `TenantId` for the request lifecycle.
+- **Authentication & Roles**: Endpoint security validates Supabase-issued tokens via JWKS. A custom `SupabaseClaimsTransformation` extracts the user's role from the token to enable standard ASP.NET Core authorization gates.
 
 ## Running
 

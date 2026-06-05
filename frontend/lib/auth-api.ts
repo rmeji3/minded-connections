@@ -1,4 +1,4 @@
-import { apiRequest, setAccessToken } from "@/lib/api-client";
+import { apiRequest } from "@/lib/api-client";
 
 export type UserRole = "Admin" | "Provider" | "Patient";
 
@@ -11,12 +11,6 @@ export interface AuthUser {
   timezone?: string;
 }
 
-export interface LoginResponse {
-  accessToken: string;
-  expiresIn: number;
-  user: AuthUser;
-}
-
 export interface LoginCredentials {
   email: string;
   password: string;
@@ -24,54 +18,28 @@ export interface LoginCredentials {
 
 // ─────────────────────────────────────────────────────────────────────────────
 
-export async function loginRequest(credentials: LoginCredentials): Promise<LoginResponse> {
-  // Clear any stale token before attempting login so the request goes out
-  // unauthenticated and a 401 (bad credentials) is never misread as an
-  // expired-session 401 that triggers a silent refresh.
-  setAccessToken(null);
-  const data = await apiRequest<LoginResponse>("/auth/login", {
+/**
+ * Signs in server-side. On success the session is stored in HttpOnly cookies
+ * by the Route Handler — no token is returned to the browser.
+ */
+export async function loginRequest(credentials: LoginCredentials): Promise<void> {
+  const res = await fetch("/api/auth/login", {
     method: "POST",
-    body: credentials,
-    skipRefresh: true,
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(credentials),
+    credentials: "include",
   });
-  setAccessToken(data.accessToken);
-  return data;
+
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({})) as { error?: string };
+    throw new Error(data.error ?? "Invalid email or password.");
+  }
 }
 
 export async function logoutRequest(): Promise<void> {
-  // Clear the token first so a stale/expired token never blocks the logout
-  // request and is always gone even if the network call fails.
-  setAccessToken(null);
-  await apiRequest<void>("/auth/logout", { method: "POST" }).catch(() => {
-    // Best-effort — local state is already cleared above.
+  await fetch("/api/auth/logout", { method: "POST", credentials: "include" }).catch(() => {
+    // Best-effort — local state is cleared regardless.
   });
-}
-
-/**
- * Attempt a silent token refresh.
- * We check for a non-HttpOnly "has_session" cookie first to avoid a
- * guaranteed 401 round-trip when the user is simply not logged in.
- */
-export async function refreshSession(): Promise<AuthUser | null> {
-  // Quick bail-out: no session indicator → skip the network call entirely
-  if (!document.cookie.includes("has_session=1")) return null;
-
-  try {
-    const base = process.env.NEXT_PUBLIC_API_URL ?? "/api";
-    const res = await fetch(`${base}/auth/refresh`, {
-      method: "POST",
-      credentials: "include",
-    });
-
-    if (!res.ok) return null;
-
-    const data = await res.json() as { access_token: string };
-    setAccessToken(data.access_token);
-
-    return apiRequest<AuthUser>("/auth/me");
-  } catch {
-    return null;
-  }
 }
 
 export async function getMeRequest(): Promise<AuthUser> {

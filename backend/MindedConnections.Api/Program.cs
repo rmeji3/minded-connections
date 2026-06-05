@@ -1,15 +1,14 @@
-using System.Text;
 using Scalar.AspNetCore;
 using Serilog;
 using Serilog.Events;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using MindedConnections.Api.Data;
 using MindedConnections.Api.Models;
 using MindedConnections.Api.Services.Auth;
-using MindedConnections.Api.Services.Jwt;
+using MindedConnections.Api.Services.Supabase;
 using MindedConnections.Api.Services.Users;
 using MindedConnections.Shared.Constants;
 
@@ -39,9 +38,7 @@ try
         new Dictionary<string, string?>
         {
             ["ConnectionStrings:Default"] = Environment.GetEnvironmentVariable("DATABASE_URL"),
-            ["Jwt:Secret"]                = Environment.GetEnvironmentVariable("JWT_SECRET"),
             ["Cors:Origin"]               = Environment.GetEnvironmentVariable("CORS_ORIGIN"),
-            ["Cookie:Secure"]             = Environment.GetEnvironmentVariable("COOKIE_SECURE"),
         }.Where(kv => kv.Value is not null)!
     );
 
@@ -68,7 +65,7 @@ try
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 
-    // ── JWT Bearer ────────────────────────────────────────────────────────────
+    // ── JWT Bearer — validates Supabase-issued tokens via JWKS ───────────────
     builder.Services.AddAuthentication(opt =>
     {
         opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -76,17 +73,12 @@ try
     })
     .AddJwtBearer(opt =>
     {
-        opt.TokenValidationParameters = new TokenValidationParameters
+        opt.Authority = "https://xkmvkglvktoczljmetxv.supabase.co/auth/v1";
+        opt.TokenValidationParameters = new()
         {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey         = new SymmetricSecurityKey(
-                                           Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"]!)),
-            ValidateIssuer           = true,
-            ValidIssuer              = builder.Configuration["Jwt:Issuer"],
-            ValidateAudience         = true,
-            ValidAudience            = builder.Configuration["Jwt:Audience"],
-            ValidateLifetime         = true,
-            ClockSkew                = TimeSpan.Zero,
+            ValidAudience    = "authenticated",
+            ValidateLifetime = true,
+            ClockSkew        = TimeSpan.Zero,
         };
 
         opt.Events = new JwtBearerEvents
@@ -99,10 +91,24 @@ try
         };
     });
 
+    // Extracts app_metadata.role from the Supabase JWT and maps it to ClaimTypes.Role.
+    builder.Services.AddTransient<IClaimsTransformation, SupabaseClaimsTransformation>();
+
     builder.Services.AddAuthorization();
 
+    // ── Supabase Admin API client ─────────────────────────────────────────────
+    var supabaseUrl        = "https://xkmvkglvktoczljmetxv.supabase.co/auth/v1/";
+    var supabaseServiceKey = builder.Configuration["Supabase:ServiceRoleKey"]!;
+
+    builder.Services.AddHttpClient<ISupabaseAdminService, SupabaseAdminService>(client =>
+    {
+        client.BaseAddress = new Uri(supabaseUrl);
+        client.DefaultRequestHeaders.Authorization =
+            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", supabaseServiceKey);
+        client.DefaultRequestHeaders.Add("apikey", supabaseServiceKey);
+    });
+
     // ── Application services ──────────────────────────────────────────────────
-    builder.Services.AddScoped<IJwtService,   JwtService>();
     builder.Services.AddScoped<IAuthService,  AuthService>();
     builder.Services.AddScoped<IUsersService, UsersService>();
 
@@ -146,19 +152,24 @@ try
         {
             if (await userManager.FindByEmailAsync(adminEmail) is null)
             {
+                // Create in Supabase first to get the canonical UUID.
+                var supabaseAdmin = scope.ServiceProvider.GetRequiredService<ISupabaseAdminService>();
+                var supabaseId = await supabaseAdmin.CreateUserAsync(adminEmail, adminPassword, Roles.Admin);
+
                 var admin = new ApplicationUser
                 {
+                    Id             = supabaseId,
                     UserName       = adminEmail,
                     Email          = adminEmail,
                     EmailConfirmed = true,
                     FirstName      = "System",
                     LastName       = "Admin",
                 };
-                var result = await userManager.CreateAsync(admin, adminPassword);
+                var result = await userManager.CreateAsync(admin);
                 if (result.Succeeded)
                 {
                     await userManager.AddToRoleAsync(admin, Roles.Admin);
-                    Log.Information("Seeded admin account {Email}", adminEmail);
+                    Log.Information("Seeded admin account {Email} (Supabase ID: {Id})", adminEmail, supabaseId);
                 }
                 else
                 {

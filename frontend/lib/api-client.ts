@@ -1,49 +1,13 @@
 /**
- * Base fetch wrapper.
+ * Base fetch wrapper for calling our Next.js Route Handlers (the /api proxy).
  *
- * - Attaches the in-memory access token to every request.
- * - On 401, attempts a single silent refresh then retries.
- * - The refresh token lives in an HttpOnly cookie — the browser
- *   sends it automatically; we never touch it in JS.
+ * Auth is carried by the HttpOnly session cookie, which the browser sends
+ * automatically on same-origin requests — there is no token in JavaScript.
+ * The Route Handlers read the cookie server-side and forward a Bearer token
+ * to the .NET API.
  */
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "/api";
-
-// Access token is kept in module memory (never localStorage / sessionStorage).
-let _accessToken: string | null = null;
-
-export function setAccessToken(token: string | null) {
-  _accessToken = token;
-}
-
-export function getAccessToken() {
-  return _accessToken;
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-
-async function silentRefresh(): Promise<boolean> {
-  try {
-    const res = await fetch(`${API_BASE}/auth/refresh`, {
-      method: "POST",
-      credentials: "include",
-    });
-
-    if (!res.ok) {
-      _accessToken = null;
-      return false;
-    }
-
-    const data = await res.json() as { access_token: string };
-    _accessToken = data.access_token;
-    return true;
-  } catch {
-    _accessToken = null;
-    return false;
-  }
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
 
 export class ApiError extends Error {
   constructor(
@@ -57,37 +21,23 @@ export class ApiError extends Error {
 
 interface RequestOptions extends Omit<RequestInit, "body"> {
   body?: unknown;
-  /** Skip the automatic silent-refresh retry on 401. Use for auth endpoints. */
-  skipRefresh?: boolean;
 }
 
 export async function apiRequest<T>(
   path: string,
   options: RequestOptions = {},
 ): Promise<T> {
-  const { body, headers: extraHeaders, skipRefresh, ...rest } = options;
+  const { body, headers: extraHeaders, ...rest } = options;
 
-  const makeRequest = (token: string | null) =>
-    fetch(`${API_BASE}${path}`, {
-      ...rest,
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        ...extraHeaders,
-      },
-      body: body !== undefined ? JSON.stringify(body) : undefined,
-    });
-
-  let res = await makeRequest(_accessToken);
-
-  // Silent refresh on 401 then retry once — but never for auth endpoints
-  // where a 401 means bad credentials, not an expired session.
-  if (res.status === 401 && !skipRefresh) {
-    const refreshed = await silentRefresh();
-    if (!refreshed) throw new ApiError(401, "Session expired");
-    res = await makeRequest(_accessToken);
-  }
+  const res = await fetch(`${API_BASE}${path}`, {
+    ...rest,
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+      ...extraHeaders,
+    },
+    body: body !== undefined ? JSON.stringify(body) : undefined,
+  });
 
   if (!res.ok) {
     let message = res.statusText;
@@ -98,10 +48,8 @@ export async function apiRequest<T>(
       } else if (typeof json?.message === "string") {
         message = json.message;
       } else if (Array.isArray(json?.errors)) {
-        // ASP.NET Identity returns { errors: ["Password too short", ...] }
         message = (json.errors as string[]).join(" ");
       } else if (json?.errors && typeof json.errors === "object") {
-        // Model validation returns { errors: { field: ["msg"] } }
         message = Object.values(json.errors as Record<string, string[]>)
           .flat()
           .join(" ");
@@ -112,7 +60,6 @@ export async function apiRequest<T>(
     throw new ApiError(res.status, message);
   }
 
-  // 204 No Content
   if (res.status === 204) return undefined as T;
 
   return res.json() as Promise<T>;
