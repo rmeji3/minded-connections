@@ -16,6 +16,7 @@ export interface Appointment {
   duration: string;
   location?: string;
   note?: string;
+  visitType?: string;
   primaryAction: "join" | "view";
   meetingUrl?: string;
   countdown?: string;
