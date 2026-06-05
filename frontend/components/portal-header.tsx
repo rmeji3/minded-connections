@@ -3,6 +3,7 @@ import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/use-auth";
 
 type ActivePage = "overview" | "appointments" | "messages" | "medications" | "records" | "billing";
 
@@ -88,6 +89,7 @@ function buildNavItems(base: string): NavItem[] {
 
 export function PortalHeader({ activePage, basePath = "/portal/patient" }: PortalHeaderProps) {
   const router    = useRouter();
+  const { user, logout } = useAuth();
   const [open, setOpen] = React.useState(false);
   const NAV_ITEMS = buildNavItems(basePath);
 
@@ -98,9 +100,30 @@ export function PortalHeader({ activePage, basePath = "/portal/patient" }: Porta
     return () => document.removeEventListener("keydown", onKey);
   }, [open]);
 
-  const handleSignOut = () => {
-    if (confirm("Sign out of the patient portal?")) router.push("/login");
+  const handleSignOut = async () => {
+    const isProvider = basePath.includes("/provider");
+    const promptMessage = isProvider
+      ? "Sign out of the provider portal?"
+      : "Sign out of the patient portal?";
+
+    if (confirm(promptMessage)) {
+      await logout();
+      router.push("/login");
+    }
   };
+
+  const initials = user
+    ? [user.firstName, user.lastName]
+        .filter(Boolean)
+        .map((n) => n![0].toUpperCase())
+        .join("") || user.email[0].toUpperCase()
+    : "U";
+
+  const displayName = user
+    ? user.firstName
+      ? `${user.firstName}${user.lastName ? ` ${user.lastName}` : ""}`
+      : user.email
+    : "User";
 
   return (
     <>
@@ -179,9 +202,9 @@ export function PortalHeader({ activePage, basePath = "/portal/patient" }: Porta
               style={{ alignItems: "center", gap: "0.5rem", padding: "0.375rem 0.75rem 0.375rem 0.375rem", background: "none", border: "1.5px solid var(--linen)", borderRadius: 100, cursor: "pointer" }}
             >
               <span style={{ width: 28, height: 28, borderRadius: "50%", background: "var(--sage-100)", color: "var(--sage-700)", fontFamily: "var(--font-display)", fontSize: "0.875rem", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
-                S
+                {initials}
               </span>
-              <span style={{ fontSize: "0.875rem", color: "var(--ink)", fontFamily: "var(--font-body)" }}>Sarah C.</span>
+              <span style={{ fontSize: "0.875rem", color: "var(--ink)", fontFamily: "var(--font-body)" }}>{displayName}</span>
             </button>
 
             {/* Hamburger — mobile only, same class as site-header */}
@@ -242,9 +265,9 @@ export function PortalHeader({ activePage, basePath = "/portal/patient" }: Porta
         {/* Profile at bottom */}
         <div style={{ marginTop: "auto", borderTop: "1px solid var(--linen)", paddingTop: "1.25rem", display: "flex", alignItems: "center", gap: "0.75rem" }}>
           <span style={{ width: 32, height: 32, borderRadius: "50%", background: "var(--sage-100)", color: "var(--sage-700)", fontFamily: "var(--font-display)", fontSize: "0.9rem", display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-            S
+            {initials}
           </span>
-          <span style={{ flex: 1, fontSize: "0.9rem", color: "var(--ink)", fontFamily: "var(--font-body)" }}>Sarah C.</span>
+          <span style={{ flex: 1, fontSize: "0.9rem", color: "var(--ink)", fontFamily: "var(--font-body)" }}>{displayName}</span>
           <button
             onClick={() => { setOpen(false); handleSignOut(); }}
             style={{ fontSize: "0.8125rem", color: "var(--stone-500)", fontFamily: "var(--font-body)", background: "none", border: "none", cursor: "pointer", padding: 0 }}
