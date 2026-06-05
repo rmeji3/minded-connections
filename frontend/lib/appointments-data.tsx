@@ -1,61 +1,6 @@
 import type { ApptGroup, PastGroup, CancelledAppt, VisitType, TimeSlot } from "@/lib/appointments-types";
 
-export const UPCOMING_GROUPS: ApptGroup[] = [
-  {
-    label: "This week",
-    range: "May 11 – May 17",
-    items: [
-      {
-        month: "MAY",
-        day: 19,
-        dow: "TUE",
-        title: "Medication ",
-        titleEm: "follow-up",
-        badges: [
-          { label: "NEXT", type: "next" },
-          { label: "TELEHEALTH", type: "telehealth" },
-        ],
-        timeRange: "2:30–3:00 pm",
-        provider: "Dr. Michelle Hernandez",
-        duration: "30 min",
-        note: "You mentioned reviewing the evening sertraline dose and following up on sleep — Dr. H has your journal notes from May 10.",
-        primaryAction: "join",
-        countdown: "In 5 days · 2:30 pm",
-      },
-    ],
-  },
-  {
-    label: "Next two weeks",
-    range: "May 18 – May 31",
-    items: [
-      {
-        month: "MAY",
-        day: 26,
-        dow: "TUE",
-        title: "Therapy ",
-        titleEm: "session",
-        badges: [{ label: "TELEHEALTH", type: "telehealth" }],
-        timeRange: "3:00–3:50 pm",
-        provider: "Jules Liu, LMFT",
-        duration: "50 min",
-        primaryAction: "view",
-      },
-      {
-        month: "JUN",
-        day: 2,
-        dow: "TUE",
-        title: "Therapy ",
-        titleEm: "session",
-        badges: [{ label: "IN-PERSON", type: "in-person" }],
-        timeRange: "3:00–3:50 pm",
-        provider: "Jules Liu, LMFT",
-        duration: "50 min",
-        location: "Corona office · Suite 210",
-        primaryAction: "view",
-      },
-    ],
-  },
-];
+export const UPCOMING_GROUPS: ApptGroup[] = [];
 
 export const PAST_GROUPS: PastGroup[] = [
   {
